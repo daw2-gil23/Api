@@ -11,14 +11,14 @@ const {database} = require('./keys')
 // inicializaciones 
 const app = express()
 const pool = require('./database')
-const r_habitacion = require('./routes/habitaciones')
+const r_habitacion = require('./routes/habitacion')
 
 //El significado de esto codigo es:
 //Voy a definir un puerto, si ahi algun puerto libre coge ese puerto sino coge e 40000
 app.set('port',process.env.PORT || 4000)
 
 //Middelwers 
-app.use('/habitaciones', r_habitacion)
+app.use('/habitacion', r_habitacion)
 
 //Empezar servidor
 app.get('/',(req, res)=>{
