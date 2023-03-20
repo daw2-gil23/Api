@@ -8,7 +8,7 @@ module.exports = {
         } catch (error) {
             res.json({
                 error:error,
-                mensaje:"algo ha salido mal"
+                mensaje:"No se ha podido leer las habitaciones"
             })
         }
     },
@@ -20,7 +20,7 @@ module.exports = {
         } catch (error) {
             res.json({
                 error:error,
-                mensaje:"algo ha salido mal"
+                mensaje:"No se ha podido leer la habitación"
             })
         } 
     },
@@ -39,7 +39,29 @@ module.exports = {
         } catch (error) {
             res.json({
                 error:error,
-                mensaje:"algo ha salido mal"
+                mensaje:"No se ha podido crear la habitación"
+            })
+        } 
+    },
+    actualizarHabitacion: async(req,res)=>{
+        try {
+            console.log("holaa")
+            const {id} = req.params.id
+            const {cama, escritorio, armario, precio, cfPiso } = req.body
+            const nuevaHabitacion = {
+                cama,
+                escritorio,
+                armario,
+                precio,
+                cfPiso
+            }
+            console.log(nuevaHabitacion)
+            await pool.query('Update habitacion set ? where id = ?', [nuevaHabitacion, id])
+            res.json('Se ha actualizado correctamente')
+        } catch (error) {
+            res.json({
+                error:error,
+                mensaje:"No se ha podido crear la habitación"
             })
         } 
     },
@@ -51,8 +73,8 @@ module.exports = {
         } catch (error) {
             res.json({
                 error:error,
-                mensaje:"algo ha salido mal"
+                mensaje:"No se ha podido eliminar la habitación"
             })
         } 
-    },
+    }
 }

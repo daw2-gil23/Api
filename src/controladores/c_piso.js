@@ -8,7 +8,7 @@ module.exports = {
         } catch (error) {
             res.json({
                 error:error,
-                mensaje:"algo ha salido mal"
+                mensaje:"No se ha podido leer los pisos"
             })
         }
     },
@@ -20,15 +20,40 @@ module.exports = {
         } catch (error) {
             res.json({
                 error:error,
-                mensaje:"algo ha salido mal"
+                mensaje:"No se ha podido leer el piso"
             })
         } 
     },
     insertarPiso: async(req,res)=>{
-        //saca por consola lo que ha recibido
-        const data = req.body
-        console.log(data)
-        // Enviar el objeto recibido en la respuesta HTTP
-        res.json(data)
+        try {
+            const {cocina, salon, terraza, wifi, aseos, sexo } = req.body
+            const nuevoPiso = {
+                cocina,
+                salon,
+                terraza,
+                wifi,
+                aseos,
+                sexo
+            }
+            await pool.query('insert into piso set ?',[nuevoPiso])
+            res.json('Se ha creado correctamente')
+        } catch (error) {
+            res.json({
+                error:error,
+                mensaje:"No se ha podido crear el piso"
+            })
+        } 
+    },
+    eliminarPiso: async(req,res)=>{
+        try {
+            const { id } = req.params 
+            await pool.query('DELETE FROM piso WHERE ID = ?', [id])
+            res.json('Se ha eliminado correctamente')
+        } catch (error) {
+            res.json({
+                error:error,
+                mensaje:"No se ha podido eliminar el piso"
+            })
+        } 
     }
 }
