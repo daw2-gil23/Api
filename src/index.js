@@ -27,7 +27,6 @@ app.use(express.urlencoded({extended:true}))
 app.use('/habitacion', r_habitacion)
 app.use('/piso', r_piso)
 app.use('/cliente', r_cliente)
-app.use('/cliente', r_cliente)
 app.use('/favorito', r_favorito)
 
 //Empezar servidor

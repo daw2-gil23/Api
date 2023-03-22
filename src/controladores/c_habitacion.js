@@ -45,8 +45,7 @@ module.exports = {
     },
     actualizarHabitacion: async(req,res)=>{
         try {
-            console.log("holaa")
-            const {id} = req.params.id
+            const id = req.params.id
             const {cama, escritorio, armario, precio, cfPiso } = req.body
             const nuevaHabitacion = {
                 cama,
@@ -55,13 +54,12 @@ module.exports = {
                 precio,
                 cfPiso
             }
-            console.log(nuevaHabitacion)
             await pool.query('Update habitacion set ? where id = ?', [nuevaHabitacion, id])
             res.json('Se ha actualizado correctamente')
         } catch (error) {
             res.json({
                 error:error,
-                mensaje:"No se ha podido crear la habitación"
+                mensaje:"No se ha podido actualizar la habitación"
             })
         } 
     },

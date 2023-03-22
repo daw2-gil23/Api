@@ -3,8 +3,8 @@ const pool = require('../database')
 module.exports = {
     leerPisos : async(req,res)=>{
         try {
-            const habitaciones = await pool.query('Select * from piso')
-            res.json(habitaciones)
+            const pisos = await pool.query('Select * from piso')
+            res.json(pisos)
         } catch (error) {
             res.json({
                 error:error,
@@ -15,8 +15,8 @@ module.exports = {
     leerPisoID: async(req,res)=>{
         try {
             const id = req.params.id
-            const habitacion = await pool.query('Select * from piso where id = ?', [id])
-            res.json(habitacion)
+            const piso = await pool.query('Select * from piso where id = ?', [id])
+            res.json(piso)
         } catch (error) {
             res.json({
                 error:error,
@@ -41,6 +41,27 @@ module.exports = {
             res.json({
                 error:error,
                 mensaje:"No se ha podido crear el piso"
+            })
+        } 
+    },
+    actualizarPiso: async(req,res)=>{
+        try {
+            const id = req.params.id
+            const {cocina, salon, terraza, wifi, aseos, sexo } = req.body
+            const nuevoPiso = {
+                cocina,
+                salon,
+                terraza,
+                wifi,
+                aseos,
+                sexo
+            }
+            await pool.query('Update piso set ? where id = ?', [nuevoPiso, id])
+            res.json('Se ha actualizado correctamente')
+        } catch (error) {
+            res.json({
+                error:error,
+                mensaje:"No se ha podido actualizar el piso"
             })
         } 
     },
