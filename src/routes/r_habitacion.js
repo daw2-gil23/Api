@@ -41,24 +41,38 @@ r_habitacion.post('/',async (req, res) => {
     }
 });
 
-// r_habitacion.delete('/:id',eliminarHabitacion)
-
 r_habitacion.put('/:id',async (req, res) => {
     try {
         const id = req.params.id
-        const {cama, escritorio, armario, precio, cfPiso } = req.body
-        const nuevaHabitacion = {
-            cama,
-            escritorio,
-            armario,
-            precio,
-            cfPiso
+        const habitacion = await Habitacion.getById(id);
+        if (!habitacion) {
+          console.log(`No se encontró ninguna habitación con ID ${id}`);
+          return;
         }
-        const respuesta = await Habitacion.create(nuevaHabitacion);
+
+        const {cama, escritorio, armario, precio, cfPiso } = req.body
+        habitacion.cama=cama
+        habitacion.escritorio=escritorio
+        habitacion.armario=armario
+        habitacion.precio=precio
+
+        const respuesta = await habitacion.update()
+
         res.json(respuesta)
+    } catch (error) {
+        res.json("Error en actualizar")
+    }
+});
+
+r_habitacion.delete('/:id',async (req, res)=>{
+    try {
+        const id = req.params.id
+        const respuesta = await Habitacion.delete(id);
+
+        res.json(respuesta);
     } catch (error) {
         res.status(500).send(error.message);
     }
-});
+})
 
 module.exports = r_habitacion

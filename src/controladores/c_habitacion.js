@@ -13,17 +13,6 @@ module.exports = class Habitacion {
   
     //leer todos
     static async getAll() {
-        console.log("hola")
-        const habitaciones = await pool.query('Select * from habitacion')
-
-        const habitacionesMap = habitaciones.map(({ id, cama, escritorio,armario,precio,cfPiso }) => {
-            return new Habitacion(id, cama, escritorio,armario,precio,cfPiso);
-        });      
-
-        return habitacionesMap
-    }
-
-    static async getAll() {
         const habitaciones = await pool.query('Select * from habitacion')
 
         const habitacionesMap = habitaciones.map(({ id, cama, escritorio,armario,precio,cfPiso }) => {
@@ -43,8 +32,6 @@ module.exports = class Habitacion {
           return null;
         }
 
-        console.log(resultados)
-    
         const habitacion = resultados[0];
         // Crear un objeto Habitacion a partir de los resultados y devolverlo
         return new Habitacion
@@ -53,22 +40,47 @@ module.exports = class Habitacion {
 
     static async create(nuevaHabitacion) {
         // Insertar una nueva habitación en la base de datos
-        await pool.query('insert into habitacion set ?',[nuevaHabitacion])
+
+        try {
+            await pool.query('insert into habitacion set ?',[nuevaHabitacion])
+            // Crear un nuevo objeto Habitacion a partir de los resultados y devolverlo
+            return('Se ha creado correctamente')
+        } catch (error) {
+            console.log(error)
+            throw new Error('Error en crear la habitación')
+        }
     
-        // Crear un nuevo objeto Habitacion a partir de los resultados y devolverlo
-        return('Se ha creado correctamente')
     }
     
-    static async update() {
-        // Actualizar la habitación en la base de datos
-        const query = 'UPDATE habitaciones SET numero = ?, tipo = ? WHERE id = ?';
-        await pool.query(query, [this.numero, this.tipo, this.id]);
-    
+    async update() {
+
+        try {
+            // Actualizar la habitación en la base de datos
+            const query = 'UPDATE habitacion SET cama = ?, escritorio = ?, armario = ?, precio = ? WHERE id = ?';
+            await pool.query(query, [this.cama, this.escritorio, this.armario, this.precio, this.id]);
+            return('Se ha actualizado correctamente')
+
+        } catch (error) {
+            console.log(error)
+            throw new Error('Error en actualizarlo')
+        }
     }
-    
-    
+
+    static async delete(id) {
+        try {
+            const query = 'DELETE FROM habitacion WHERE id = ?';
+            const result = await pool.query(query, [id]);
+
+            if (result.affectedRows === 0) {
+              throw new Error(`No se encontró ninguna habitación con el ID ${id}`);
+            }
+
+            return `Habitación con el ID ${id} eliminada correctamente`;
+
+          } catch (error) {
+            console.error(error);
+            throw new Error('Error al eliminar la habitación');
+          }
+    }        
+        
 }
-
-  
-  
-
