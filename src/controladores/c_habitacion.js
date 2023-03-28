@@ -1,7 +1,7 @@
 const pool = require('../database')
 
 module.exports = class Habitacion {
-    // Mapping de propiedades de la tabla perfiles
+    // Mapping de propiedades de la tabla habitacion
     constructor(id=null, cama=null, escritorio=null, armario=null, precio=null, cfPiso=null) {
       this.id = id
       this.cama = cama
@@ -29,7 +29,7 @@ module.exports = class Habitacion {
     
         // Si no se encuentra ninguna habitación con ese ID, devolver null
         if (resultados.length === 0) {
-          return null;
+            return "Error";
         }
 
         const habitacion = resultados[0];

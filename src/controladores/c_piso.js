@@ -1,80 +1,86 @@
 const pool = require('../database')
 
-module.exports = {
-    leerPisos : async(req,res)=>{
-        try {
-            const pisos = await pool.query('Select * from piso')
-            res.json(pisos)
-        } catch (error) {
-            res.json({
-                error:error,
-                mensaje:"No se ha podido leer los pisos"
-            })
-        }
-    },
-    leerPisoID: async(req,res)=>{
-        try {
-            const id = req.params.id
-            const piso = await pool.query('Select * from piso where id = ?', [id])
-            res.json(piso)
-        } catch (error) {
-            res.json({
-                error:error,
-                mensaje:"No se ha podido leer el piso"
-            })
-        } 
-    },
-    insertarPiso: async(req,res)=>{
-        try {
-            const {cocina, salon, terraza, wifi, aseos, sexo } = req.body
-            const nuevoPiso = {
-                cocina,
-                salon,
-                terraza,
-                wifi,
-                aseos,
-                sexo
-            }
-            await pool.query('insert into piso set ?',[nuevoPiso])
-            res.json('Se ha creado correctamente')
-        } catch (error) {
-            res.json({
-                error:error,
-                mensaje:"No se ha podido crear el piso"
-            })
-        } 
-    },
-    actualizarPiso: async(req,res)=>{
-        try {
-            const id = req.params.id
-            const {cocina, salon, terraza, wifi, aseos, sexo } = req.body
-            const nuevoPiso = {
-                cocina,
-                salon,
-                terraza,
-                wifi,
-                aseos,
-                sexo
-            }
-            await pool.query('Update piso set ? where id = ?', [nuevoPiso, id])
-            res.json('Se ha actualizado correctamente')
-        } catch (error) {
-            res.json({
-                error:error,
-                mensaje:"No se ha podido actualizar el piso"
-            })
-        } 
-    },
-    eliminarPiso: async(req,res)=>{
-        try {
-            const { id } = req.params 
-            await pool.query('DELETE FROM piso WHERE ID = ?', [id])
-            res.json('Se ha eliminado correctamente')
-        } catch (error) {
-            res.json({
-                error:error,
-                mensaje:"No se ha podido eliminar el piso"
-            })
-        } 
+module.exports = class Piso {
+    // Mapping de propiedades de la tabla piso
+    constructor(id=null, cocina=null, salon=null, terraza=null, wifi=null, aseos=null, sexo=null) {
+      this.id = id
+      this.cocina = cocina
+      this.salon = salon
+      this.terraza = terraza
+      this.wifi = wifi
+      this.aseos = aseos
+      this.sexo = sexo
     }
+  
+    //leer todos
+    static async getAll() {
+        const pisos = await pool.query('Select * from piso')
+
+        const pisosMap = pisos.map(({ id, cocina, salon,terraza,wifi,aseos,sexo }) => {
+            return new Piso(id, cocina, salon,terraza,wifi, aseos ,sexo );
+        });      
+
+        return pisosMap
+    }
+
+    static async getById(id) {
+        // Consultar a la base de datos para obtener la habitación con el ID especificado
+        const query = 'SELECT * FROM piso WHERE id = ?';
+        const resultados = await pool.query(query, [id]);
+    
+        // Si no se encuentra ninguna habitación con ese ID, devolver null
+        if (resultados.length === 0) {
+          return "Error";
+        }
+
+        const piso = resultados[0];
+        // Crear un objeto Habitacion a partir de los resultados y devolverlo
+        return new Piso
+        (piso.id, piso.cocina, piso.salon, piso.terraza, piso.wifi, piso.aseos, piso.sexo)
+    }
+
+    static async create(nuevoPiso) {
+
+        try {
+            await pool.query('insert into piso set ?',[nuevoPiso])
+
+            return('Se ha creado correctamente')
+        } catch (error) {
+            console.log(error)
+            throw new Error('Error en crear el piso')
+        }
+    
+    }
+    
+    async update() {
+
+        try {
+            // Actualizar la habitación en la base de datos
+            const query = 'UPDATE piso SET cocina = ?, salon = ?, terraza = ?, wifi = ?, aseos = ?, sexo = ? WHERE id = ?';
+            await pool.query(query, [this.cocina, this.salon, this.terraza, this.wifi, this.aseos, this.sexo, this.id]);
+            return('Se ha actualizado correctamente')
+
+        } catch (error) {
+            console.log(error)
+            return('Error')
+        }
+    }
+
+    static async delete(id) {
+        try {
+            const query = 'DELETE FROM piso WHERE id = ?';
+            const result = await pool.query(query, [id]);
+
+            if (result.affectedRows === 0) {
+                return "Error";
+            }
+
+            return `Habitación con el ID ${id} eliminada correctamente`;
+
+          } catch (error) {
+            console.error(error);
+            throw new Error('Error al eliminar la habitación');
+          }
+    }        
+        
 }
