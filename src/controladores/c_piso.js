@@ -24,17 +24,17 @@ module.exports = class Piso {
     }
 
     static async getById(id) {
-        // Consultar a la base de datos para obtener la habitación con el ID especificado
+        // Consultar a la base de datos para obtener la pisoión con el ID especificado
         const query = 'SELECT * FROM piso WHERE id = ?';
         const resultados = await pool.query(query, [id]);
     
-        // Si no se encuentra ninguna habitación con ese ID, devolver null
+        // Si no se encuentra ninguna pisoión con ese ID, devolver null
         if (resultados.length === 0) {
           return "Error";
         }
 
         const piso = resultados[0];
-        // Crear un objeto Habitacion a partir de los resultados y devolverlo
+        // Crear un objeto pisoion a partir de los resultados y devolverlo
         return new Piso
         (piso.id, piso.cocina, piso.salon, piso.terraza, piso.wifi, piso.aseos, piso.sexo)
     }
@@ -55,7 +55,7 @@ module.exports = class Piso {
     async update() {
 
         try {
-            // Actualizar la habitación en la base de datos
+            // Actualizar la piso en la base de datos
             const query = 'UPDATE piso SET cocina = ?, salon = ?, terraza = ?, wifi = ?, aseos = ?, sexo = ? WHERE id = ?';
             await pool.query(query, [this.cocina, this.salon, this.terraza, this.wifi, this.aseos, this.sexo, this.id]);
             return('Se ha actualizado correctamente')
@@ -75,11 +75,11 @@ module.exports = class Piso {
                 return "Error";
             }
 
-            return `Habitación con el ID ${id} eliminada correctamente`;
+            return `Piso con el ID ${id} eliminada correctamente`;
 
           } catch (error) {
             console.error(error);
-            throw new Error('Error al eliminar la habitación');
+            throw new Error('Error al eliminar la piso');
           }
     }        
         
