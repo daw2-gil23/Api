@@ -15,7 +15,7 @@ module.exports = class Reserva {
         const reservas = await pool.query('Select * from reserva')
 
         const reservasMap = reservas.map(({ id, fecha_entrada, fecha_salida,cfCliente,cfHabitacion}) => {
-            return new Favorito(id, fecha_entrada, fecha_salida,cfCliente,cfHabitacion);
+            return new Reserva(id, fecha_entrada, fecha_salida,cfCliente,cfHabitacion);
         });      
 
         return reservasMap
@@ -23,40 +23,53 @@ module.exports = class Reserva {
 
     static async getByIdCliente(idCliente) {
         // Consultar a la base de datos para obtener la habitación con el ID especificado
-        const query = 'SELECT * FROM favorito WHERE cfCliente = ?';
-        const favoritos = await pool.query(query, [idCliente]);
+        const query = 'SELECT * FROM reserva WHERE cfCliente = ?';
+        const reservas = await pool.query(query, [idCliente]);
     
-        const favoritosMap = favoritos.map(({ id, cfCliente, cfHabitacion}) => {
-            return new Favorito(id, cfCliente, cfHabitacion);
+        const reservasMap = reservas.map(({ id, fecha_entrada, fecha_salida,cfCliente,cfHabitacion}) => {
+            return new Reserva(id, fecha_entrada, fecha_salida,cfCliente,cfHabitacion);
         });      
 
-        return favoritosMap
+        return reservasMap
     }
 
-    static async create(nuevoFavorito) {
+    static async getByIdHabitacion(idHabitacion) {
+        // Consultar a la base de datos para obtener la habitación con el ID especificado
+
+        const query = 'SELECT * FROM reserva WHERE cfHabitacion = ?';
+        const reservas = await pool.query(query, [idHabitacion]);
+    
+        const reservasMap = reservas.map(({ id, fecha_entrada, fecha_salida,cfCliente,cfHabitacion}) => {
+            return new Reserva(id, fecha_entrada, fecha_salida,cfCliente,cfHabitacion);
+        });      
+
+        return reservasMap
+    }
+
+    static async create(nuevaReserva) {
 
         try {
-            await pool.query('insert into favorito set ?',[nuevoFavorito])
+            await pool.query('insert into reserva set ?',[nuevaReserva])
 
             return('Se ha guardado correctamente')
         } catch (error) {
             console.log(error)
-            throw new Error('Error al guardar en favoritos')
+            throw new Error('Error al reservar')
         }
     
     }
     
-    static async delete(idCliente,idHabitacion) {
+    static async delete(idCliente) {
         try {
 
-            const query = 'DELETE FROM favorito WHERE cfCliente = ? and cfHabitacion = ?';
-            const result = await pool.query(query, [idCliente,idHabitacion]);
+            const query = 'DELETE FROM reserva WHERE cfCliente = ?';
+            const result = await pool.query(query, [idCliente]);
 
             if (result.affectedRows === 0) {
                 return "Error";
             }
 
-            return `Se ha eliminado el favorito de ${idCliente} de la habitacion ${idHabitacion} `;
+            return `Se ha eliminado la reserva del cliente ${idCliente} `;
 
           } catch (error) {
             console.error(error);

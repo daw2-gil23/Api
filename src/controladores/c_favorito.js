@@ -54,7 +54,7 @@ module.exports = class Favorito {
                 return "Error";
             }
 
-            return `Se ha eliminado el favorito de ${idCliente} de la habitacion ${idHabitacion} `;
+            return `Se ha eliminado el favorito del usuario ${idCliente} de la habitacion ${idHabitacion} `;
 
           } catch (error) {
             console.error(error);
