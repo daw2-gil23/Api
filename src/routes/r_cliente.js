@@ -31,16 +31,61 @@ r_cliente.get('/:id',async (req, res) => {
 r_cliente.post('/',async (req, res) => {
     try {
         const {nombre, primerApellido, segundoApellido, email, contrasenya,telefono } = req.body
-        const nuevoCliente = {
-            nombre,
-            primerApellido,
-            segundoApellido,
-            email,
-            contrasenya,
-            telefono
+        const regex = /^[a-zA-Z0-9]+$/;
+        var errores = []
+        
+        if (!nombre || nombre.length < 2 || nombre.length > 20 || !(regex.test(nombre))) {
+            errores.push("El usuario es inválido")
         }
-        const respuesta = await Cliente.create(nuevoCliente);
-        res.json(respuesta)
+
+        if (!primerApellido || primerApellido.length < 2 || primerApellido.length > 20 || !(regex.test(primerApellido))) {
+            errores.push("El primer apellido es inválido")
+        }
+
+        if (!segundoApellido || segundoApellido.length < 2 || segundoApellido.length > 20 || !(regex.test(segundoApellido
+            ))) {
+            errores.push("El segundo apellido es inválido")
+        }
+
+        //else{
+        //     const regex = /^[a-zA-Z0-9 ]+$/;
+        //     if(!primerApellido || primerApellido.length < 2 || primerApellido.length > 20 || !(regex.test(primerApellido))){
+
+        //     }else{
+        //         const nuevoCliente = {
+        //             nombre,
+        //             primerApellido,
+        //             segundoApellido,
+        //             email,
+        //             contrasenya,
+        //             telefono
+        //         }
+                
+        //         const respuesta = await Cliente.create(nuevoCliente);
+        //         res.json(respuesta)   
+        //     }
+
+        // }
+
+        if (errores.length > 0) {
+            // Si hay errores, devolverlos como un array
+            res.json(errores)
+        } else {
+                    
+            const nuevoCliente = {
+                nombre,
+                primerApellido,
+                segundoApellido,
+                email,
+                contrasenya,
+                telefono
+            }
+            
+            const respuesta = await Cliente.create(nuevoCliente)
+            res.json(respuesta)   
+
+        }
+        
 
     } catch (error) {
         res.status(500).send(error.message);
