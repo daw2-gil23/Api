@@ -42,8 +42,7 @@ r_cliente.post('/',async (req, res) => {
             errores.push("El primer apellido es inválido")
         }
 
-        if (!segundoApellido || segundoApellido.length < 2 || segundoApellido.length > 20 || !(regex.test(segundoApellido
-            ))) {
+        if (!segundoApellido || segundoApellido.length < 2 || segundoApellido.length > 20 || !(regex.test(segundoApellido))) {
             errores.push("El segundo apellido es inválido")
         }
 
