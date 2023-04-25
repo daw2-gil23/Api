@@ -13,7 +13,7 @@ r_cliente.get('/',async (req, res) => {
     }
 });
 
-r_cliente.get('/:id',async (req, res) => {
+r_cliente.get('/cliente/:id',async (req, res) => {
     try {
         const id = req.params.id
         const clienteId = await Cliente.getById(id);
@@ -27,6 +27,25 @@ r_cliente.get('/:id',async (req, res) => {
         res.status(500).send(error.message);
     }
 });
+
+r_cliente.get('/login/',async (req, res) => {
+    try {
+        const {email, contrasenya } = req.body
+
+        const cliente = await Cliente.login(email,contrasenya);
+
+        if(cliente.success==true){
+            res.send(cliente.cliente);
+        }else{
+            res.status(cliente.status).send(cliente.message);
+        }
+
+
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
 
 r_cliente.post('/',async (req, res) => {
     try {

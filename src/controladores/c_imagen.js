@@ -16,10 +16,13 @@ module.exports = class Imagen {
             // preparar la consulta SQL      
             const query = 'INSERT INTO imagen (nombre, imagen, cfHabitacion) VALUES (?, ?, ?)';
             await pool.query(query, [nombre, imagen, IdHabitacion]);
+            return { success: true };
+
 
         } catch (error) {
             console.log(error)
-            throw new Error('Error en crear la habitación')
+            return { success: false, message: 'Error en crear la imagen', status: 500 };
+
         }
     
     }
@@ -46,7 +49,7 @@ module.exports = class Imagen {
           return "Error";
         }
 
-        const imagen = resultados[0];
+        const imagen = resultados[0]
         // Crear un objeto pisoion a partir de los resultados y devolverlo
         return new Imagen
         (imagen.id, imagen.nombre, imagen.imagen, imagen.cfHabitacion)
@@ -74,11 +77,11 @@ module.exports = class Imagen {
                 return "Error";
             }
 
-            return `Piso con el ID ${id} eliminada correctamente`;
+            return `Imagen con el ID ${id} eliminada correctamente`;
 
           } catch (error) {
             console.error(error);
-            throw new Error('Error al eliminar la piso');
+            throw new Error('Error al eliminar la imagen');
           }
     }        
     

@@ -78,8 +78,30 @@ module.exports = class Cliente {
 
           } catch (error) {
             console.error(error);
-            throw new Error('Error al eliminar la habitación');
+            throw new Error('Error al eliminar el cliente');
           }
-    }        
+    } 
+    
+    static async login(email,contrasenya) {
+        try {
+        
+            const query = 'SELECT * FROM cliente WHERE email = ? and contrasenya = ?';
+            const resultados = await pool.query(query, [email,contrasenya]);
+
+            const cliente = resultados[0];
+
+            if(resultados.length === 0){
+                return { success: false, message: "Error en logearse", status: 500 };
+            }else{
+                return { success: true, cliente: cliente };
+            }
+
+
+          } catch (error) {
+
+            return { success: false, message: 'Error logearse', status: 500 };
+
+          }
+    }   
         
 }

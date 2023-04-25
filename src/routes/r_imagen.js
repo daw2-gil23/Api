@@ -1,6 +1,8 @@
 const express = require('express')
 const Imagen = require('../controladores/c_imagen')
 const multer = require('multer');
+const sharp = require('sharp');
+
 
 const r_imagen = express.Router()
 //base de datos pero el le llama pool
@@ -22,15 +24,33 @@ r_imagen.get('/:id', async (req, res) => {
 
 // definir una ruta para subir la imagen
 r_imagen.post('/:id', upload.single('imagen'), async(req, res) => {
-    // leer los datos de la imagen
-    const imagen = req.file.buffer
-    const nombre = req.file.originalname
-    const IdHabitacion = req.params.id
-  
-    Imagen.create(imagen,nombre,IdHabitacion)
+    try {
+        // leer los datos de la imagen
+        const imagen = req.file.buffer
+        const nombre = req.file.originalname
+        const IdHabitacion = req.params.id
 
-    // enviar una respuesta HTTP con un mensaje de éxito
-    res.send('Imagen guardada en la base de datos');
+        const imagenRedimensionada = await sharp(imagen)
+            .resize({
+            width: 800,
+            height: 600,
+            fit: sharp.fit.inside,
+            withoutEnlargement: true,
+            })
+            .toBuffer();
+
+    
+        const respuesta = await Imagen.create(imagenRedimensionada,nombre,IdHabitacion)
+
+        if(respuesta.success == false){
+            res.status(500).send(respuesta.message);
+        }
+
+        // enviar una respuesta HTTP con un mensaje de éxito
+        res.send('Imagen guardada en la base de datos');
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
 })
 
 r_imagen.put('/:id',upload.single('imagen'), async(req, res) => {
@@ -42,7 +62,17 @@ r_imagen.put('/:id',upload.single('imagen'), async(req, res) => {
             res.status(404).send("No se ha encontrado la imagen con la id " + id);
         }else{
             imagen.nombre = req.file.originalname
-            imagen.imagen = req.file.buffer
+
+            const imagenRedimensionada = await sharp(req.file.buffer)
+            .resize({
+            width: 800,
+            height: 600,
+            fit: sharp.fit.inside,
+            withoutEnlargement: true,
+            })
+            .toBuffer();
+
+            imagen.imagen = imagenRedimensionada
     
             const respuesta = await imagen.update()
     
@@ -53,6 +83,23 @@ r_imagen.put('/:id',upload.single('imagen'), async(req, res) => {
         res.status(500).send(error.message);
     }
 });
+
+r_imagen.delete('/:id',async (req, res)=>{
+    try {
+        const id = req.params.id
+        const respuesta = await Imagen.delete(id);
+
+        if(respuesta=="Error"){
+            res.status(404).send("No se ha encontrado la imagen con la id " + id);
+        }else{
+            res.json(respuesta);;
+        }
+
+        
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+})
 
   
 

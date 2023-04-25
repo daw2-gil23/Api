@@ -17,6 +17,7 @@ const r_reserva = require('./routes/r_reserva')
 const r_servicio = require('./routes/r_servicio')
 const r_servicioContratados = require('./routes/r_servicioContratados')
 const r_imagenes = require('./routes/r_imagen')
+const r_admin = require('./routes/r_admin')
 
 //El significado de esto codigo es:
 //Voy a definir un puerto, si ahi algun puerto libre coge ese puerto sino coge e 40000
@@ -36,6 +37,8 @@ app.use('/reserva', r_reserva)
 app.use('/servicio', r_servicio)
 app.use('/servicioContratado', r_servicioContratados)
 app.use('/imagen', r_imagenes)
+app.use('/admin', r_admin)
+
 
 //Empezar servidor
 app.get('/',(req, res)=>{
