@@ -1,4 +1,5 @@
 const pool = require('../database')
+const bcrypt = require('bcrypt');
 
 module.exports = class Cliente {
     // Mapping de propiedades de la tabla piso
@@ -85,15 +86,24 @@ module.exports = class Cliente {
     static async login(email,contrasenya) {
         try {
         
-            const query = 'SELECT * FROM cliente WHERE email = ? and contrasenya = ?';
-            const resultados = await pool.query(query, [email,contrasenya]);
+            const query = 'SELECT * FROM cliente WHERE email = ?';
+            const resultados = await pool.query(query, [email]);
 
             const cliente = resultados[0];
 
             if(resultados.length === 0){
-                return { success: false, message: "Error en logearse", status: 500 };
+                return { success: false, message: "El email es incorrecto", status: 500 };
             }else{
-                return { success: true, cliente: cliente };
+                // Si hay resultados, comprobar si la contraseña es correcta
+                const storedPassword = cliente.contrasenya;
+                const passwordsMatch = bcrypt.compareSync(contrasenya, storedPassword);
+                if (passwordsMatch) {
+                    return { success: true, cliente: cliente };
+                } else {
+                    console.log('La contraseña es incorrecta');
+                    return { success: false, message: "La contrasenya es incorrecta", status: 500 };
+                }
+
             }
 
 
@@ -102,6 +112,19 @@ module.exports = class Cliente {
             return { success: false, message: 'Error logearse', status: 500 };
 
           }
+    }   
+
+    static async revisarCorreo(email) {
+        
+        const query = 'SELECT * FROM cliente WHERE email = ? '
+        const resultados = await pool.query(query, [email]);
+
+        if(resultados.length === 0){
+            return false
+        }else{
+            return true
+        }
+
     }   
         
 }

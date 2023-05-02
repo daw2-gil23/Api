@@ -1,6 +1,7 @@
 const express = require('express');
 const Cliente = require('../controladores/c_cliente');
 const r_cliente = express.Router()
+const bcrypt = require('bcrypt');
 //base de datos pero el le llama pool
 
 
@@ -49,8 +50,8 @@ r_cliente.get('/login/',async (req, res) => {
 
 r_cliente.post('/',async (req, res) => {
     try {
-        const {nombre, primerApellido, segundoApellido, email, contrasenya,telefono } = req.body
-        const regex = /^[a-zA-Z0-9]+$/;
+        const {nombre, primerApellido, segundoApellido, email, password,telefono } = req.body
+        var regex = /^[a-zA-Z0-9]+$/;
         var errores = []
         
         if (!nombre || nombre.length < 2 || nombre.length > 20 || !(regex.test(nombre))) {
@@ -65,31 +66,39 @@ r_cliente.post('/',async (req, res) => {
             errores.push("El segundo apellido es inválido")
         }
 
-        //else{
-        //     const regex = /^[a-zA-Z0-9 ]+$/;
-        //     if(!primerApellido || primerApellido.length < 2 || primerApellido.length > 20 || !(regex.test(primerApellido))){
+        regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-        //     }else{
-        //         const nuevoCliente = {
-        //             nombre,
-        //             primerApellido,
-        //             segundoApellido,
-        //             email,
-        //             contrasenya,
-        //             telefono
-        //         }
-                
-        //         const respuesta = await Cliente.create(nuevoCliente);
-        //         res.json(respuesta)   
-        //     }
+        if (!email || email.length > 50 || !(regex.test(email))) {
+            errores.push("El email es inválido")
+        }
 
-        // }
+        try {
+            const emailExistente = await Cliente.revisarCorreo(email)
+            if(emailExistente===true){
+                errores.push("El email ya existe")
+            }
+        } catch (error) {
+            errores.push("Error en comparar email")
+        }
+
+        regex = /^[0-9]+$/;
+
+        if (!telefono || telefono.length < 7 || telefono.length > 15 || !(regex.test(telefono))) {
+            errores.push("El telefono es inválido")
+        }
 
         if (errores.length > 0) {
             // Si hay errores, devolverlos como un array
             res.json(errores)
         } else {
-                    
+
+            // Generar un salt (un valor aleatorio que se utiliza en la función hash)
+            const saltRounds = 10;
+            const salt = bcrypt.genSaltSync(saltRounds);
+
+            // Encriptar la contraseña utilizando el salt
+            const contrasenya = bcrypt.hashSync(password, salt);
+
             const nuevoCliente = {
                 nombre,
                 primerApellido,

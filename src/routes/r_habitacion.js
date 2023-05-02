@@ -1,5 +1,6 @@
 const express = require('express')
-const Habitacion = require('../controladores/c_habitacion')
+const Habitacion = require('../controladores/c_habitacion');
+const Piso = require('../controladores/c_piso');
 
 const r_habitacion = express.Router()
 //base de datos pero el le llama pool
@@ -32,15 +33,47 @@ r_habitacion.get('/:id',async (req, res) => {
 r_habitacion.post('/',async (req, res) => {
     try {
         const {cama, escritorio, armario, precio, cfPiso } = req.body
-        const nuevaHabitacion = {
-            cama,
-            escritorio,
-            armario,
-            precio,
-            cfPiso
+        var errores = []
+
+        if(cama!==0 && cama!==1){
+            errores.push("La cama solo puede ser o true o false")
         }
-        const respuesta = await Habitacion.create(nuevaHabitacion);
-        res.json(respuesta)
+        if(escritorio!==0 && escritorio!==1){
+            errores.push("El escritorio solo puede ser o true o false")
+        }
+        if(armario!==0 && armario!==1){
+            errores.push("El armario solo puede ser o true o false")
+        }
+        if(precio>1000 || precio<0){
+            errores.push("El precio es incorrecto")
+        }
+
+        try {
+            const piso = await Piso.getById(cfPiso)
+            if(piso=="Error"){
+                errores.push("No existe el piso")
+            }
+        } catch (error) {
+            errores.push("Error en buscar el piso")
+        }
+
+        if (errores.length > 0) {
+            // Si hay errores, devolverlos como un array
+            res.json(errores)
+        } else {
+
+            const nuevaHabitacion = {
+                cama,
+                escritorio,
+                armario,
+                precio,
+                cfPiso
+            }
+            const respuesta = await Habitacion.create(nuevaHabitacion);
+            res.json(respuesta)
+
+        }
+
     } catch (error) {
         res.status(500).send(error.message);
     }
