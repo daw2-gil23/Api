@@ -32,16 +32,50 @@ r_piso.get('/:id',async (req, res) => {
 r_piso.post('/',async (req, res) => {
     try {
         const {cocina, salon, terraza, wifi, aseos,sexo } = req.body
-        const nuevoPiso = {
-            cocina,
-            salon,
-            terraza,
-            wifi,
-            aseos,
-            sexo
+
+        var errores = []
+        
+        if(cocina!==0 && cocina!==1){
+            errores.push("La cocina solo puede ser o true o false")
         }
-        const respuesta = await Piso.create(nuevoPiso);
-        res.json(respuesta)
+
+        if(salon!==0 && salon!==1){
+            errores.push("El salon solo puede ser o true o false")
+        }
+
+        if(terraza!==0 && terraza!==1){
+            errores.push("La terraza solo puede ser o true o false")
+        }
+        
+        if(wifi!==0 && wifi!==1){
+            errores.push("El wifi solo puede ser o true o false")
+        }
+
+        if(aseos<0 || aseos>3){
+            errores.push("El aseo debe ser entre 0 y 3")
+        }
+
+        if(sexo!=="F" && sexo!=="H" && sexo!=="M"){
+            errores.push("El sexo solo puede ser femenino(F), masculino(H) o mixto (M)")
+        }
+
+        if (errores.length > 0) {
+            // Si hay errores, devolverlos como un array
+            res.json(errores)
+        } else {
+
+            const nuevoPiso = {
+                cocina,
+                salon,
+                terraza,
+                wifi,
+                aseos,
+                sexo
+            }
+            const respuesta = await Piso.create(nuevoPiso);
+            res.json(respuesta)
+
+        }
 
     } catch (error) {
         res.status(500).send(error.message);

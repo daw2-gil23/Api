@@ -83,7 +83,7 @@ r_cliente.post('/',async (req, res) => {
 
         regex = /^[0-9]+$/;
 
-        if (!telefono || telefono.length < 7 || telefono.length > 15 || !(regex.test(telefono))) {
+        if (!telefono || telefono.length < 8 || telefono.length > 11 || !(regex.test(telefono))) {
             errores.push("El telefono es inválido")
         }
 

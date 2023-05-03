@@ -2,6 +2,7 @@ const express = require('express')
 const Imagen = require('../controladores/c_imagen')
 const multer = require('multer');
 const sharp = require('sharp');
+const Habitacion = require('../controladores/c_habitacion');
 
 
 const r_imagen = express.Router()
@@ -30,7 +31,23 @@ r_imagen.post('/:id', upload.single('imagen'), async(req, res) => {
         const nombre = req.file.originalname
         const IdHabitacion = req.params.id
 
-        const imagenRedimensionada = await sharp(imagen)
+        var errores = []
+
+        try {
+            const habitacion = await Habitacion.getById(IdHabitacion)
+            if(habitacion=="Error"){
+                errores.push("No existe la habitacion")
+            }
+        } catch (error) {
+            errores.push("Error en buscar la habitacion")
+        }
+
+        if (errores.length > 0) {
+            // Si hay errores, devolverlos como un array
+            res.json(errores)
+        } else {
+
+            const imagenRedimensionada = await sharp(imagen)
             .resize({
             width: 800,
             height: 600,
@@ -40,14 +57,17 @@ r_imagen.post('/:id', upload.single('imagen'), async(req, res) => {
             .toBuffer();
 
     
-        const respuesta = await Imagen.create(imagenRedimensionada,nombre,IdHabitacion)
+            const respuesta = await Imagen.create(imagenRedimensionada,nombre,IdHabitacion)
 
-        if(respuesta.success == false){
-            res.status(500).send(respuesta.message);
+            if(respuesta.success == false){
+                res.status(500).send(respuesta.message);
+            }
+
+            // enviar una respuesta HTTP con un mensaje de éxito
+            res.send('Imagen guardada en la base de datos');
+
         }
 
-        // enviar una respuesta HTTP con un mensaje de éxito
-        res.send('Imagen guardada en la base de datos');
     } catch (error) {
         res.status(500).send(error.message);
     }
