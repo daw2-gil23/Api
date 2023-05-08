@@ -11,5 +11,5 @@ Las tecnologias que voy a utilizar:
 - Bcrypt (Libreria de Nodejs para encriptar contrasenyas)
 - Multer (Libreria de Nodejs para procesar las imagens enviadas en una solicitud HTTP)
 
-## Recuersos 
+## Recursos
 [Tutorial para aparender a hacer una api con nodejs ](https://www.youtube.com/watch?v=qJ5R9WTW0_E&list=LL&index=5&t=10758s)
