@@ -55,7 +55,7 @@ r_cliente.post('/',async (req, res) => {
         var errores = []
         
         if (!nombre || nombre.length < 2 || nombre.length > 20 || !(regex.test(nombre))) {
-            errores.push("El usuario es inválido")
+            errores.push("El nombre es inválido")
         }
 
         if (!primerApellido || primerApellido.length < 2 || primerApellido.length > 20 || !(regex.test(primerApellido))) {

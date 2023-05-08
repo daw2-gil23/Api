@@ -33,13 +33,36 @@ r_servicio.get('/:id',async (req, res) => {
 r_servicio.post('/',async (req, res) => {
     try {
         const {nombre, precio, description} = req.body
-        const nuevoServicio = {
-            nombre,
-            precio,
-            description
+        var errores = []
+        var regex = /^[a-zA-Z0-9 ]+$/;
+
+        if (!nombre || nombre.length < 2 || nombre.length > 20 || !(regex.test(nombre))) {
+            errores.push("El nombre es inválido")
         }
-        const respuesta = await Servicio.create(nuevoServicio);
-        res.json(respuesta)
+
+        if (!description || !(regex.test(description))) {
+            errores.push("La descripcion es inválida")
+        }
+
+        if(precio>1000 || precio<0){
+            errores.push("El precio es incorrecto")
+        }
+
+        if (errores.length > 0) {
+            // Si hay errores, devolverlos como un array
+            res.json(errores)
+        } else {
+
+            const nuevoServicio = {
+                nombre,
+                precio,
+                description
+            }
+            const respuesta = await Servicio.create(nuevoServicio);
+            res.json(respuesta)
+
+        }
+
     } catch (error) {
         res.status(500).send(error.message);
     }
