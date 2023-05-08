@@ -12,4 +12,4 @@ Las tecnologias que voy a utilizar:
 - Multer (Libreria de Nodejs para procesar las imagens enviadas en una solicitud HTTP)
 
 ## Recuersos 
-[Tutorial par aparender a hacer una api con nodejs ](https://www.youtube.com/watch?v=qJ5R9WTW0_E&list=LL&index=5&t=10758s)
+[Tutorial para aparender a hacer una api con nodejs ](https://www.youtube.com/watch?v=qJ5R9WTW0_E&list=LL&index=5&t=10758s)
