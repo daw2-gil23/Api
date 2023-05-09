@@ -1,4 +1,5 @@
 const pool = require('../database')
+const Piso = require('./c_piso')
 
 module.exports = class Habitacion {
     // Mapping de propiedades de la tabla habitacion
@@ -82,5 +83,33 @@ module.exports = class Habitacion {
             throw new Error('Error al eliminar la habitación');
           }
     }        
+
+    static async validar(cama, escritorio, armario, precio, cfPiso) {
+        var errores = []
+
+        if(cama!==0 && cama!==1){
+            errores.push("La cama solo puede ser o true o false")
+        }
+        if(escritorio!==0 && escritorio!==1){
+            errores.push("El escritorio solo puede ser o true o false")
+        }
+        if(armario!==0 && armario!==1){
+            errores.push("El armario solo puede ser o true o false")
+        }
+        if(precio>1000 || precio<0){
+            errores.push("El precio es incorrecto")
+        }
+
+        try {
+            const piso = await Piso.getById(cfPiso)
+            if(piso=="Error"){
+                errores.push("No existe el piso")
+            }
+        } catch (error) {
+            errores.push("Error en buscar el piso")
+        }
+
+        return errores
+    }     
         
 }

@@ -50,42 +50,9 @@ r_cliente.get('/login/',async (req, res) => {
 
 r_cliente.post('/',async (req, res) => {
     try {
-        const {nombre, primerApellido, segundoApellido, email, password,telefono } = req.body
-        var regex = /^[a-zA-Z0-9]+$/;
-        var errores = []
-        
-        if (!nombre || nombre.length < 2 || nombre.length > 20 || !(regex.test(nombre))) {
-            errores.push("El nombre es inválido")
-        }
+        const {nombre, primerApellido, segundoApellido, email, password,telefono,avatar } = req.body
 
-        if (!primerApellido || primerApellido.length < 2 || primerApellido.length > 20 || !(regex.test(primerApellido))) {
-            errores.push("El primer apellido es inválido")
-        }
-
-        if (!segundoApellido || segundoApellido.length < 2 || segundoApellido.length > 20 || !(regex.test(segundoApellido))) {
-            errores.push("El segundo apellido es inválido")
-        }
-
-        regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-        if (!email || email.length > 50 || !(regex.test(email))) {
-            errores.push("El email es inválido")
-        }
-
-        try {
-            const emailExistente = await Cliente.revisarCorreo(email)
-            if(emailExistente===true){
-                errores.push("El email ya existe")
-            }
-        } catch (error) {
-            errores.push("Error en comparar email")
-        }
-
-        regex = /^[0-9]+$/;
-
-        if (!telefono || telefono.length < 8 || telefono.length > 11 || !(regex.test(telefono))) {
-            errores.push("El telefono es inválido")
-        }
+        const errores = await Cliente.validar(nombre, primerApellido, segundoApellido, email, password,telefono,avatar)
 
         if (errores.length > 0) {
             // Si hay errores, devolverlos como un array
@@ -105,7 +72,8 @@ r_cliente.post('/',async (req, res) => {
                 segundoApellido,
                 email,
                 contrasenya,
-                telefono
+                telefono,
+                avatar
             }
             
             const respuesta = await Cliente.create(nuevoCliente)
@@ -127,18 +95,30 @@ r_cliente.put('/:id',async (req, res) => {
         if(cliente=="Error"){
             res.status(404).send("No se ha encontrado el cliente con la id " + id);
         }else{
-            const {nombre, primerApellido, segundoApellido, email, contrasenya,telefono } = req.body
-            cliente.nombre=nombre
-            cliente.primerApellido=primerApellido
-            cliente.segundoApellido=segundoApellido
-            cliente.email=email
-            cliente.contrasenya=contrasenya
-            cliente.telefono=telefono
-            
+            const {nombre, primerApellido, segundoApellido, email, contrasenya,telefono,avatar } = req.body
+
+            const errores = await Cliente.validar(nombre, primerApellido, segundoApellido, email, contrasenya,telefono,avatar)
+
+            if (errores.length > 0) {
+                // Si hay errores, devolverlos como un array
+                res.json(errores)
+            } else {
     
-            const respuesta = await cliente.update()
+                cliente.nombre=nombre
+                cliente.primerApellido=primerApellido
+                cliente.segundoApellido=segundoApellido
+                cliente.email=email
+                cliente.contrasenya=contrasenya
+                cliente.telefono=telefono
+                cliente.avatar=avatar
+                
+        
+                const respuesta = await cliente.update()
+        
+                res.send(respuesta); 
     
-            res.send(respuesta);
+            }
+
         }
 
     } catch (error) {

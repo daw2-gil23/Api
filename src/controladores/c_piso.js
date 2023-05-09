@@ -81,6 +81,36 @@ module.exports = class Piso {
             console.error(error);
             throw new Error('Error al eliminar la piso');
           }
+    }       
+    
+    static async validar(cocina, salon, terraza, wifi, aseos,sexo) {
+        var errores = []
+        
+        if(cocina!==0 && cocina!==1){
+            errores.push("La cocina solo puede ser o true o false")
+        }
+
+        if(salon!==0 && salon!==1){
+            errores.push("El salon solo puede ser o true o false")
+        }
+
+        if(terraza!==0 && terraza!==1){
+            errores.push("La terraza solo puede ser o true o false")
+        }
+        
+        if(wifi!==0 && wifi!==1){
+            errores.push("El wifi solo puede ser o true o false")
+        }
+
+        if(aseos<0 || aseos>3){
+            errores.push("El aseo debe ser entre 0 y 3")
+        }
+
+        if(sexo!=="F" && sexo!=="H" && sexo!=="M"){
+            errores.push("El sexo solo puede ser femenino(F), masculino(H) o mixto (M)")
+        }
+
+        return errores
     }        
         
 }

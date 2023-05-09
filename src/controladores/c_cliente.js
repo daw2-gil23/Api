@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 
 module.exports = class Cliente {
     // Mapping de propiedades de la tabla piso
-    constructor(id=null, nombre=null, primerApellido=null, segundoApellido=null, email=null, contrasenya=null, telefono=null) {
+    constructor(id=null, nombre=null, primerApellido=null, segundoApellido=null, email=null, contrasenya=null, telefono=null,avatar=1) {
       this.id = id
       this.nombre = nombre
       this.primerApellido = primerApellido
@@ -11,14 +11,15 @@ module.exports = class Cliente {
       this.email = email
       this.contrasenya = contrasenya
       this.telefono = telefono
+      this.avatar = avatar 
     }
   
     //leer todos
     static async getAll() {
         const clientes = await pool.query('Select * from cliente')
 
-        const clientesMap = clientes.map(({ id, nombre, primerApellido,segundoApellido,email,contrasenya,telefono }) => {
-            return new Cliente(id, nombre, primerApellido,segundoApellido,email, contrasenya ,telefono );
+        const clientesMap = clientes.map(({ id, nombre, primerApellido,segundoApellido,email,contrasenya,telefono,avatar }) => {
+            return new Cliente(id, nombre, primerApellido,segundoApellido,email, contrasenya ,telefono,avatar );
         });      
 
         return clientesMap
@@ -37,7 +38,7 @@ module.exports = class Cliente {
         const cliente = resultados[0];
         // Crear un objeto Habitacion a partir de los resultados y devolverlo
         return new Cliente
-        (cliente.id, cliente.nombre, cliente.primerApellido, cliente.segundoApellido, cliente.email, cliente.contrasenya, cliente.telefono)
+        (cliente.id, cliente.nombre, cliente.primerApellido, cliente.segundoApellido, cliente.email, cliente.contrasenya, cliente.telefono,cliente.avatar)
     }
 
     static async create(nuevoCliente) {
@@ -56,8 +57,8 @@ module.exports = class Cliente {
     async update() {
 
         try {
-            const query = 'UPDATE cliente SET nombre = ?, primerApellido = ?, segundoApellido = ?, email = ?, contrasenya = ?, telefono = ? WHERE id = ?';
-            await pool.query(query, [this.nombre, this.primerApellido, this.segundoApellido, this.email, this.contrasenya, this.telefono, this.id]);
+            const query = 'UPDATE cliente SET nombre = ?, primerApellido = ?, segundoApellido = ?, email = ?, contrasenya = ?, telefono = ?, avatar = ? WHERE id = ?';
+            await pool.query(query, [this.nombre, this.primerApellido, this.segundoApellido, this.email, this.contrasenya, this.telefono, this.avatar, this.id]);
             return('Se ha actualizado correctamente')
 
         } catch (error) {
@@ -124,6 +125,59 @@ module.exports = class Cliente {
         }else{
             return true
         }
+
+    }   
+
+    
+    static async validar(nombre, primerApellido, segundoApellido, email, password,telefono,avatar) {
+        var regex = /^[a-zA-Z0-9]+$/;
+
+        var errores = []
+        
+        if (!nombre || nombre.length < 2 || nombre.length > 20 || !(regex.test(nombre))) {
+            errores.push("El nombre es inválido")
+        }
+
+        if (!primerApellido || primerApellido.length < 2 || primerApellido.length > 20 || !(regex.test(primerApellido))) {
+            errores.push("El primer apellido es inválido")
+        }
+
+        if (!segundoApellido || segundoApellido.length < 2 || segundoApellido.length > 20 || !(regex.test(segundoApellido))) {
+            errores.push("El segundo apellido es inválido")
+        }
+
+        regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        if (!email || email.length > 50 || !(regex.test(email))) {
+            errores.push("El email es inválido")
+        }
+
+        try {
+            const emailExistente = await Cliente.revisarCorreo(email)
+            if(emailExistente===true){
+                errores.push("El email ya existe")
+            }
+        } catch (error) {
+            errores.push("Error en comparar email")
+        }
+
+        regex = /^[0-9]+$/;
+
+        if (!telefono || telefono.length < 8 || telefono.length > 11 || !(regex.test(telefono))) {
+            errores.push("El telefono es inválido")
+        }
+
+        if (!avatar || avatar < 0 || avatar > 10 || !(regex.test(avatar))) {
+            errores.push("El avatar es inválido")
+        }
+
+        regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{5,}$/;
+
+        if (!password || !(regex.test(password))) {
+            errores.push("La contraseña es inválida")
+        }
+
+        return errores
 
     }   
         
