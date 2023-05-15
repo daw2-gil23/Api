@@ -1,9 +1,18 @@
 //guardaremos los datos que utilizaremos 
+// module.exports={
+//     database:{
+//         host:'localhost',
+//         user:'root',
+//         password: 'root',
+//         database: 'bdpensiontejada'
+//     }
+// }
+
 module.exports={
     database:{
-        host:'localhost',
+        host:'containers-us-west-208.railway.app',
         user:'root',
-        password: 'root',
-        database: 'bdpensiontejada'
+        password: 'cWAQo9OOeyOmMZREalID',
+        database: 'railway'
     }
 }
