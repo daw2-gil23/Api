@@ -92,6 +92,8 @@ module.exports = class Cliente {
 
             const cliente = resultados[0];
 
+            console.log(cliente)
+
             if(resultados.length === 0){
                 return { success: false, message: "El email es incorrecto", status: 500 };
             }else{
@@ -173,7 +175,7 @@ module.exports = class Cliente {
 
         regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{5,}$/;
 
-        if (!password || !(regex.test(password))) {
+        if (!password || password > 200 ||  !(regex.test(password))) {
             errores.push("La contraseña es inválida")
         }
 
