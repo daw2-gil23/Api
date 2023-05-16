@@ -13,6 +13,7 @@ module.exports={
         host:'containers-us-west-208.railway.app',
         user:'root',
         password: 'cWAQo9OOeyOmMZREalID',
-        database: 'railway'
+        database: 'railway',
+        port:6333
     }
 }
