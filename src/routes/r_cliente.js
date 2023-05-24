@@ -29,7 +29,7 @@ r_cliente.get('/:id',async (req, res) => {
     }
 });
 
-r_cliente.get('/login/',async (req, res) => {
+r_cliente.post('/login/',async (req, res) => {
     try {
         const {email, contrasenya } = req.body
 
