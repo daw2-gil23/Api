@@ -38,7 +38,7 @@ r_cliente.post('/login/',async (req, res) => {
         if(cliente.success==true){
             res.send(cliente.cliente);
         }else{
-            res.status(cliente.status).send(cliente.message);
+            res.send(cliente.message);
         }
 
 

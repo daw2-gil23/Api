@@ -95,7 +95,7 @@ module.exports = class Cliente {
             console.log(cliente)
 
             if(resultados.length === 0){
-                return { success: false, message: "email", status: 500 };
+                return { success: false, message: "El email es incorrecto"};
             }else{
                 // Si hay resultados, comprobar si la contraseña es correcta
                 const storedPassword = cliente.contrasenya;
@@ -103,8 +103,8 @@ module.exports = class Cliente {
                 if (passwordsMatch) {
                     return { success: true, cliente: cliente };
                 } else {
-                    console.log('contraseña');
-                    return { success: false, message: "contraseña", status: 500 };
+                    console.log('La contraseña es incorrecta');
+                    return { success: false, message: "La contrasenya es incorrecta"};
                 }
 
             }
