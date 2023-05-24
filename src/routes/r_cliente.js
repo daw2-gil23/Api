@@ -14,7 +14,7 @@ r_cliente.get('/',async (req, res) => {
     }
 });
 
-r_cliente.get('/cliente/:id',async (req, res) => {
+r_cliente.get('/:id',async (req, res) => {
     try {
         const id = req.params.id
         const clienteId = await Cliente.getById(id);
