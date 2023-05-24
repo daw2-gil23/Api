@@ -95,15 +95,22 @@ r_cliente.put('/:id',async (req, res) => {
         if(cliente=="Error"){
             res.status(404).send("No se ha encontrado el cliente con la id " + id);
         }else{
-            const {nombre, primerApellido, segundoApellido, email, contrasenya,telefono,avatar } = req.body
+            const {nombre, primerApellido, segundoApellido, email, password,telefono,avatar } = req.body
 
-            const errores = await Cliente.validar(nombre, primerApellido, segundoApellido, email, contrasenya,telefono,avatar)
+            const errores = await Cliente.validar(nombre, primerApellido, segundoApellido, email, password,telefono,avatar)
 
             if (errores.length > 0) {
                 // Si hay errores, devolverlos como un array
                 res.json(errores)
             } else {
     
+                // Generar un salt (un valor aleatorio que se utiliza en la función hash)
+                const saltRounds = 10;
+                const salt = bcrypt.genSaltSync(saltRounds);
+
+                // Encriptar la contraseña utilizando el salt
+                const contrasenya = bcrypt.hashSync(password, salt);
+
                 cliente.nombre=nombre
                 cliente.primerApellido=primerApellido
                 cliente.segundoApellido=segundoApellido
