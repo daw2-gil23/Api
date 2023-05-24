@@ -5,9 +5,12 @@ const express = require('express')
 const MySQLStore = require('express-mysql-session')
 
 const bodyParser = require('body-parser')
+const cors = requiere('cors')
 
 // inicializaciones 
 const app = express()
+app.use(cors())
+
 const pool = require('./database')
 const r_habitacion = require('./routes/r_habitacion')
 const r_piso = require('./routes/r_piso')
