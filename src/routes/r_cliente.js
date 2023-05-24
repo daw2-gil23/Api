@@ -118,7 +118,7 @@ r_cliente.put('/:id',async (req, res) => {
         
                 const respuesta = await cliente.update()
         
-                res.send(respuesta); 
+                res.json(respuesta); 
     
             }
 
