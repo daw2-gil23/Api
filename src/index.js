@@ -5,7 +5,7 @@ const express = require('express')
 const MySQLStore = require('express-mysql-session')
 
 const bodyParser = require('body-parser')
-const cors = requiere('cors')
+const cors = require('cors')
 
 // inicializaciones 
 const app = express()
