@@ -35,11 +35,7 @@ r_cliente.post('/login/',async (req, res) => {
 
         const cliente = await Cliente.login(email,contrasenya);
 
-        if(cliente.success==true){
-            res.send(cliente.cliente);
-        }else{
-            res.send(cliente.message);
-        }
+        res.send(cliente);
 
 
     } catch (error) {
