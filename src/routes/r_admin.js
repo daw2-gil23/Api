@@ -11,9 +11,9 @@ r_admin.get('/login',async (req, res) => {
         const cliente = await Administrador.login(email,contrasenya);
 
         if(cliente.success==true){
-            res.send(cliente.admin);
+            res.json(cliente.admin);
         }else{
-            res.status(cliente.status).send(cliente.message);
+            res.json(cliente.message);
         }
 
 
