@@ -22,7 +22,6 @@ r_imagen.get('/:id', async (req, res) => {
   res.json(imagenes);
 })
 
-
 // definir una ruta para subir la imagen
 r_imagen.post('/:id', upload.single('imagen'), async(req, res) => {
     try {
