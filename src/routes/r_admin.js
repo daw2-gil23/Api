@@ -4,7 +4,7 @@ const r_admin = express.Router()
 //base de datos pero el le llama pool
 
 
-r_admin.get('/login',async (req, res) => {
+r_admin.post('/login',async (req, res) => {
     try {
         const {email, contrasenya } = req.body
 
