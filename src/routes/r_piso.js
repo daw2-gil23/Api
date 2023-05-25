@@ -84,7 +84,7 @@ r_piso.put('/:id',async (req, res) => {
         
                 const respuesta = await piso.update()
         
-                res.send(respuesta);
+                res.json(respuesta);
     
             }
 

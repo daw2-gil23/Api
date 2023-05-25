@@ -96,7 +96,7 @@ r_imagen.put('/:id',upload.single('imagen'), async(req, res) => {
     
             const respuesta = await imagen.update()
     
-            res.send(respuesta);
+            res.json(respuesta);
         }
 
     } catch (error) {

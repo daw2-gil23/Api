@@ -29,6 +29,22 @@ r_favorito.get('/:idCliente',async (req, res) => {
     }
 });
 
+r_favorito.get('/habitacion/:idHabitacion',async (req, res) => {
+    try {
+        const idHabitacion = req.params.idHabitacion
+        const favoritosHabitacion = await Favorito.getByIdCliente(idHabitacion);
+            
+        if(favoritosHabitacion=="Error"){
+            res.status(404).send("No se ha encontrado el cliente con la id " + idHabitacion);
+        }else{
+            res.send(favoritosHabitacion);
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+
 
 r_favorito.post('/',async (req, res) => {
     try {

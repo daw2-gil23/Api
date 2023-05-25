@@ -31,6 +31,18 @@ module.exports = class Favorito {
         return favoritosMap
     }
 
+    static async getByIdCliente(idHabitacion) {
+        // Consultar a la base de datos para obtener la habitación con el ID especificado
+        const query = 'SELECT * FROM favorito WHERE cfHabitacion = ?';
+        const favoritos = await pool.query(query, [idHabitacion]);
+    
+        const favoritosMap = favoritos.map(({ id, cfCliente, cfHabitacion}) => {
+            return new Favorito(id, cfCliente, cfHabitacion);
+        });      
+
+        return favoritosMap
+    }
+
     static async create(nuevoFavorito) {
 
         try {

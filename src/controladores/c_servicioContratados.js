@@ -95,12 +95,9 @@ module.exports = class ServicioContratado {
             query = 'UPDATE serviciosContratados SET precioTotal = ? WHERE cfCliente = ?';
             await pool.query(query,[suma, cfCliente]);
 
-            return('Se ha actualizado correctamente')
-
 
           } catch (error) {
             console.error(error);
-            throw new Error('Error al sumar los precios de los servicios');
           }
     }        
 

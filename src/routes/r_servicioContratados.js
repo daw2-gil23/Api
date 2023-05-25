@@ -52,6 +52,7 @@ r_servicioContratados.post('/',async (req, res) => {
             estado: "pendiente"
         }
         const respuesta = await ServicioContratado.create(nuevoServicioContratado);
+        ServicioContratado.sumarPreciosPorUsuario(cfCliente)
         res.json(respuesta)
     } catch (error) {
         res.status(500).send(error.message);
@@ -75,6 +76,8 @@ r_servicioContratados.put('/:id',async (req, res) => {
         serviciosContratados.precioTotal=precioTotal
 
         const respuesta = await serviciosContratados.update()
+
+        ServicioContratado.sumarPreciosPorUsuario(cfCliente)
 
         res.json(respuesta)
     } catch (error) {
