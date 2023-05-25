@@ -98,9 +98,14 @@ module.exports = class Habitacion {
         if(armario!==0 && armario!==1){
             errores.push("El armario solo puede ser o true o false")
         }
-        if(precio>1000 || precio<0){
-            errores.push("El precio es incorrecto")
+        if (Number.isInteger(precio)) {
+            if (precio > 1000 || precio < 0) {
+              errores.push("El precio es incorrecto");
+            }
+          } else {
+            errores.push("El precio no es un número entero");
         }
+          
 
         try {
             const piso = await Piso.getById(cfPiso)

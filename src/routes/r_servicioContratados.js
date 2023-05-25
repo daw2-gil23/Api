@@ -42,18 +42,29 @@ r_servicioContratados.get('/:id',async (req, res) => {
 r_servicioContratados.post('/',async (req, res) => {
     try {
         const {id, tiempoInicio, tiempoFinal, cfCliente, cfServicio, precioTotal  } = req.body
-        const nuevoServicioContratado = {
-            id,
-            tiempoInicio,
-            tiempoFinal, 
-            cfCliente,
-            cfServicio,
-            precioTotal,
-            estado: "pendiente"
+
+        const errores = await ServicioContratado.validar(tiempoInicio, tiempoFinal, cfCliente, cfServicio, precioTotal)
+
+        if (errores.length > 0) {
+            // Si hay errores, devolverlos como un array
+            res.json(errores)
+        } else {
+
+            const nuevoServicioContratado = {
+                id,
+                tiempoInicio,
+                tiempoFinal, 
+                cfCliente,
+                cfServicio,
+                precioTotal,
+                estado: "pendiente"
+            }
+            const respuesta = await ServicioContratado.create(nuevoServicioContratado);
+            ServicioContratado.sumarPreciosPorUsuario(cfCliente)
+            res.json(respuesta)
+
         }
-        const respuesta = await ServicioContratado.create(nuevoServicioContratado);
-        ServicioContratado.sumarPreciosPorUsuario(cfCliente)
-        res.json(respuesta)
+
     } catch (error) {
         res.status(500).send(error.message);
     }
@@ -62,24 +73,35 @@ r_servicioContratados.post('/',async (req, res) => {
 r_servicioContratados.put('/:id',async (req, res) => {
     try {
         const id = req.params.id
-        const serviciosContratados = await ServicioContratado.getById(id);
-        if (!serviciosContratados) {
-          console.log(`No se encontró ningun servicio Contratado con la ID ${id}`);
-          return;
-        }
 
         const {tiempoInicio, tiempoFinal, cfCliente, cfServicio, precioTotal  } = req.body
-        serviciosContratados.tiempoInicio=tiempoInicio
-        serviciosContratados.tiempoFinal=tiempoFinal
-        serviciosContratados.cfCliente=cfCliente
-        serviciosContratados.cfServicio=cfServicio
-        serviciosContratados.precioTotal=precioTotal
+        const errores = await ServicioContratado.validar(tiempoInicio, tiempoFinal, cfCliente, cfServicio, precioTotal)
 
-        const respuesta = await serviciosContratados.update()
+        const serviciosContratados = await ServicioContratado.getById(id);
+        if (!serviciosContratados) {
+            errores.push('No existe el servicio contratado con esa id')
+        }
 
-        ServicioContratado.sumarPreciosPorUsuario(cfCliente)
 
-        res.json(respuesta)
+        if (errores.length > 0) {
+            // Si hay errores, devolverlos como un array
+            res.json(errores)
+        } else {
+
+            serviciosContratados.tiempoInicio=tiempoInicio
+            serviciosContratados.tiempoFinal=tiempoFinal
+            serviciosContratados.cfCliente=cfCliente
+            serviciosContratados.cfServicio=cfServicio
+            serviciosContratados.precioTotal=precioTotal
+    
+            const respuesta = await serviciosContratados.update()
+    
+            ServicioContratado.sumarPreciosPorUsuario(cfCliente)
+    
+            res.json(respuesta)
+
+        }
+
     } catch (error) {
         res.json("Error en actualizar")
     }

@@ -81,5 +81,28 @@ module.exports = class Servicio {
             throw new Error('Error al eliminar el servicio');
           }
     }        
+
+    static async validar(nombre, description, precio) {
+        var errores = []
+        var regex = /^[a-zA-Z0-9 ]+$/;
+
+        if (!nombre || nombre.length < 2 || nombre.length > 20 || !(regex.test(nombre))) {
+            errores.push("El nombre es inválido")
+        }
+
+        if (!description || !(regex.test(description))) {
+            errores.push("La descripcion es inválida")
+        }
+
+        if (Number.isInteger(precio)) {
+            if (precio > 1000 || precio < 0) {
+              errores.push("El precio es incorrecto");
+            }
+          } else {
+            errores.push("El precio no es un número entero");
+        }
+          
+        return errores
+    }        
         
 }

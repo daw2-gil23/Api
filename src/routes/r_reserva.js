@@ -45,14 +45,24 @@ r_reserva.get('/habitacion/:idHabitacion',async (req, res) => {
 r_reserva.post('/',async (req, res) => {
     try {
         const {fecha_entrada, fecha_salida, cfCliente, cfHabitacion } = req.body
-        const nuevaReserva = {
-            fecha_entrada,
-            fecha_salida,
-            cfCliente,
-            cfHabitacion
+
+        const errores = await Reserva.validar(fecha_entrada, fecha_salida, cfCliente, cfHabitacion)
+
+        if (errores.length > 0) {
+            // Si hay errores, devolverlos como un array
+            res.json(errores)
+        } else {
+
+            const nuevaReserva = {
+                fecha_entrada,
+                fecha_salida,
+                cfCliente,
+                cfHabitacion
+            }
+            const respuesta = await Reserva.create(nuevaReserva);
+            res.json(respuesta)
+
         }
-        const respuesta = await Reserva.create(nuevaReserva);
-        res.json(respuesta)
 
     } catch (error) {
         res.status(500).send(error.message);

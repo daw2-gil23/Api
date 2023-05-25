@@ -1,4 +1,6 @@
 const pool = require('../database')
+const moment = require('moment')
+const Cliente = require('./c_cliente')
 
 module.exports = class Reserva {
     // Mapping de propiedades de la tabla piso
@@ -75,6 +77,44 @@ module.exports = class Reserva {
             console.error(error);
             throw new Error('Error a eliminar de favoritos');
           }
+    }        
+
+    static async validar(fecha_entrada,fecha_salida,cfCliente,cfHabitacion) {
+        var errores = []
+        
+        const fechaEntradaValida = moment(fecha_entrada, 'YYYY-MM-DD', true).isValid();
+        const fechaSalidaValida = moment(fecha_salida, 'YYYY-MM-DD', true).isValid();
+        
+        if (fechaEntradaValida && fechaSalidaValida) {
+            const fechaEntrada = new Date(fecha_entrada);
+            const fechaSalida = new Date(fecha_salida);
+        
+            if (fechaEntrada >= fechaSalida) {
+                errores.push("Fecha entrada no puede ser mayor al de salida");
+            }
+        } else {
+            errores.push("El formato de las fechas no es válido");
+        }        
+        
+        try {
+            const cliente = await Cliente.getById(cfCliente)
+            if(cliente=="Error"){
+                errores.push("No existe el cliente")
+            }
+        } catch (error) {
+            errores.push("Error en buscar el cliente")
+        }
+
+        try {
+            const habitacion = await Cliente.getById(cfHabitacion)
+            if(habitacion=="Error"){
+                errores.push("No existe la habitacion")
+            }
+        } catch (error) {
+            errores.push("Error en buscar la habitacion")
+        }
+
+        return errores
     }        
         
 }

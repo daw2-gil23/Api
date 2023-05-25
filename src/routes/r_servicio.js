@@ -33,20 +33,8 @@ r_servicio.get('/:id',async (req, res) => {
 r_servicio.post('/',async (req, res) => {
     try {
         const {nombre, precio, description} = req.body
-        var errores = []
-        var regex = /^[a-zA-Z0-9 ]+$/;
 
-        if (!nombre || nombre.length < 2 || nombre.length > 20 || !(regex.test(nombre))) {
-            errores.push("El nombre es inválido")
-        }
-
-        if (!description || !(regex.test(description))) {
-            errores.push("La descripcion es inválida")
-        }
-
-        if(precio>1000 || precio<0){
-            errores.push("El precio es incorrecto")
-        }
+        const errores = await Servicio.validar(nombre, precio, description)
 
         if (errores.length > 0) {
             // Si hay errores, devolverlos como un array
@@ -78,13 +66,24 @@ r_servicio.put('/:id',async (req, res) => {
         }
 
         const {nombre, precio, description} = req.body
-        servicio.nombre=nombre
-        servicio.precio=precio
-        servicio.description=description
 
-        const respuesta = await servicio.update()
 
-        res.json(respuesta)
+        const errores = await Servicio.validar(nombre, precio, description)
+
+        if (errores.length > 0) {
+            // Si hay errores, devolverlos como un array
+            res.json(errores)
+        } else {
+
+            servicio.nombre=nombre
+            servicio.precio=precio
+            servicio.description=description
+
+            const respuesta = await servicio.update()
+
+            res.json(respuesta)
+        }
+
     } catch (error) {
         res.json("Error en actualizar")
     }

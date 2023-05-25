@@ -132,7 +132,7 @@ module.exports = class Cliente {
 
     
     static async validar(nombre, primerApellido, segundoApellido, email, password,telefono,avatar) {
-        var regex = /^[a-zA-Z0-9]+$/;
+        var regex = /^[a-zA-Z]+$/;
 
         var errores = []
         
@@ -177,6 +177,14 @@ module.exports = class Cliente {
 
         if (!password || password > 200 ||  !(regex.test(password))) {
             errores.push("La contraseña es inválida")
+        }
+
+        if (Number.isInteger(precio)) {
+            if (precio > 1000 || precio < 0) {
+              errores.push("El precio es incorrecto");
+            }
+          } else {
+            errores.push("El precio no es un número entero");
         }
 
         return errores
