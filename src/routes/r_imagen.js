@@ -19,7 +19,7 @@ r_imagen.get('/:id', async (req, res) => {
   console.log("Enviando imagen")
 
   // enviar una respuesta HTTP con un mensaje de éxito
-  res.send(imagenes);
+  res.json(imagenes);
 })
 
 
@@ -64,7 +64,7 @@ r_imagen.post('/:id', upload.single('imagen'), async(req, res) => {
             }
 
             // enviar una respuesta HTTP con un mensaje de éxito
-            res.send('Imagen guardada en la base de datos');
+            res.json('Imagen guardada en la base de datos');
 
         }
 
