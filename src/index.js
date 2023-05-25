@@ -46,8 +46,7 @@ app.use('/admin', r_admin)
 //Empezar servidor
 app.get('/',(req, res)=>{
     res.send("Estas en la raiz")
-    const apiKey = process.env.secret;
-    console.log(apiKey)
+
 })
 
 app.listen(app.get('port'),()=>{

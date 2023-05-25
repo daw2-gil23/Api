@@ -1,4 +1,5 @@
 const pool = require('../database')
+const jwt = require('jsonwebtoken')
 
 module.exports = class Administrador{
     // Mapping de propiedades de la tabla piso
@@ -17,13 +18,24 @@ module.exports = class Administrador{
             const query = 'SELECT * FROM administrador WHERE email = ? and contrasenya = ?';
             const resultados = await pool.query(query, [email,contrasenya]);
 
-            
             const admin = resultados[0]
 
             if(resultados.length === 0){
                 return { success: false, message: "Error en logearse", status: 500 };
             }else{
-                return { success: true, admin: admin };
+                const token = await jwt.sign(
+                    {
+                        data: {
+                            userID: admin.id
+                        } //datos que queremos encriptar
+                    }, 
+                    process.env.secret, //palabra secreta para hacer la encriptación
+                    { expiresIn: 60 * 60 } //1 hora antes de caducar
+                )
+
+                console.log("gola")
+
+                return { success: true, admin: admin , token:token};
             }
 
 
