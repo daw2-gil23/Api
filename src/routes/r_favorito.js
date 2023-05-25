@@ -32,7 +32,7 @@ r_favorito.get('/:idCliente',async (req, res) => {
 r_favorito.get('/habitacion/:idHabitacion',async (req, res) => {
     try {
         const idHabitacion = req.params.idHabitacion
-        const favoritosHabitacion = await Favorito.getByIdCliente(idHabitacion);
+        const favoritosHabitacion = await Favorito.getByIDHabitacion(idHabitacion);
             
         if(favoritosHabitacion=="Error"){
             res.status(404).send("No se ha encontrado el cliente con la id " + idHabitacion);
