@@ -1,9 +1,11 @@
 const express = require('express');
 const Reserva = require('../controladores/c_reservas');
 const r_reserva = express.Router()
+const auth = require('../middleware/auth');
+const rol = require('../middleware/rol')
 //base de datos pero el le llama pool
 
-r_reserva.get('/',async (req, res) => {
+r_reserva.get('/',auth, rol(['admin']),async (req, res) => {
     try {
         const reservas = await Reserva.getAll();
         res.send(reservas);
@@ -12,7 +14,7 @@ r_reserva.get('/',async (req, res) => {
     }
 });
 
-r_reserva.get('/cliente/:idCliente',async (req, res) => {
+r_reserva.get('/cliente/:idCliente',auth, async (req, res) => {
     try {
         const idCliente = req.params.idCliente
         const reservaCliente = await Reserva.getByIdCliente(idCliente);
@@ -27,7 +29,7 @@ r_reserva.get('/cliente/:idCliente',async (req, res) => {
     }
 });
 
-r_reserva.get('/habitacion/:idHabitacion',async (req, res) => {
+r_reserva.get('/habitacion/:idHabitacion',auth, async (req, res) => {
     try {
         const idHabitacion = req.params.idHabitacion
         const reservaCliente = await Reserva.getByIdHabitacion(idHabitacion);
@@ -42,7 +44,7 @@ r_reserva.get('/habitacion/:idHabitacion',async (req, res) => {
     }
 });
 
-r_reserva.post('/',async (req, res) => {
+r_reserva.post('/',auth, async (req, res) => {
     try {
         const {fecha_entrada, fecha_salida, cfCliente, cfHabitacion } = req.body
 
@@ -69,7 +71,7 @@ r_reserva.post('/',async (req, res) => {
     }
 });
 
-r_reserva.delete('/:idCliente',async (req, res) => {
+r_reserva.delete('/:idCliente',auth, async (req, res) => {
     try {
         const idCliente = req.params.idCliente
         const respuesta = await Reserva.delete(idCliente);

@@ -2,10 +2,12 @@ const express = require('express');
 const Cliente = require('../controladores/c_cliente');
 const r_cliente = express.Router()
 const bcrypt = require('bcrypt');
+const auth = require('../middleware/auth');
+const rol = require('../middleware/rol')
 //base de datos pero el le llama pool
 
 
-r_cliente.get('/',async (req, res) => {
+r_cliente.get('/',auth, rol(['admin']),async (req, res) => {
     try {
         const clientes = await Cliente.getAll();
         res.send(clientes);
@@ -83,7 +85,7 @@ r_cliente.post('/',async (req, res) => {
     }
 });
 
-r_cliente.put('/:id',async (req, res) => {
+r_cliente.put('/:id',auth,async (req, res) => {
     try {
         const id = req.params.id
         const cliente = await Cliente.getById(id);
@@ -129,7 +131,7 @@ r_cliente.put('/:id',async (req, res) => {
     }
 });
 
-r_cliente.delete('/:id',async (req, res)=>{
+r_cliente.delete('/:id',auth, rol(['admin']),async (req, res)=>{
     try {
         const id = req.params.id
         const respuesta = await Cliente.delete(id);

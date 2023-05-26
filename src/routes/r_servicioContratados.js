@@ -1,6 +1,7 @@
 const express = require('express');
 const ServicioContratado = require('../controladores/c_servicioContratados');
-
+const auth = require('../middleware/auth');
+const rol = require('../middleware/rol')
 const r_servicioContratados = express.Router()
 //base de datos pero el le llama pool
 
@@ -15,7 +16,7 @@ r_servicioContratados.get('/sumar/:id',async (req, res) => {
 });
 
 
-r_servicioContratados.get('/',async (req, res) => {
+r_servicioContratados.get('/',auth, rol(['admin']),async (req, res) => {
     try {
         const serviciosContratados = await ServicioContratado.getAll();
         res.send(serviciosContratados);
@@ -24,22 +25,37 @@ r_servicioContratados.get('/',async (req, res) => {
     }
 });
 
-r_servicioContratados.get('/:id',async (req, res) => {
+r_servicioContratados.get('/:id',auth, rol(['admin']),async (req, res) => {
     try {
         const id = req.params.id
-        const habitacionId = await ServicioContratado.getById(id);
+        const servicioContratadosId = await ServicioContratado.getById(id);
 
-        if(habitacionId=="Error"){
+        if(servicioContratadosId=="Error"){
             res.status(404).send("No se ha encontrado la habitacion con la id " + id);
         }else{
-            res.send(habitacionId);
+            res.send(servicioContratadosId);
         }
     } catch (error) {
         res.status(500).send(error.message);
     }
 });
 
-r_servicioContratados.post('/',async (req, res) => {
+r_servicioContratados.get('/cliente/:id',async (req, res) => {
+    try {
+        const id = req.params.id
+        const servicioContratadosId = await ServicioContratado.getByIdCliente(id);
+
+        if(servicioContratadosId=="Error"){
+            res.status(404).send("No se ha encontrado la habitacion con la id " + id);
+        }else{
+            res.send(servicioContratadosId);
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+r_servicioContratados.post('/',auth, async (req, res) => {
     try {
         const {id, tiempoInicio, tiempoFinal, cfCliente, cfServicio, precioTotal  } = req.body
 
@@ -70,7 +86,7 @@ r_servicioContratados.post('/',async (req, res) => {
     }
 });
 
-r_servicioContratados.put('/:id',async (req, res) => {
+r_servicioContratados.put('/:id',auth, async (req, res) => {
     try {
         const id = req.params.id
 

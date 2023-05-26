@@ -1,0 +1,26 @@
+
+Buscar cliente de una habitacion
+select cliente.nombre from cliente 
+inner join reserva on cliente.id=reserva.cfCliente where reserva.cfHabitacion=1
+
+Buscar el nombre del cliente y la id de la habitcion por el precio de la habitacion
+select cliente.nombre, habitacion.id from reserva 
+inner join cliente on cliente.id=reserva.cfCliente
+inner join habitacion on habitacion.id=reserva.cfHabitacion
+where habitacion.precio>300
+
+Buscamos habitaciones favoritos por la id del usuario
+select habitacion.id, cliente.nombre from favorito 
+inner join habitacion on habitacion.id=favorito.cfHabitacion
+inner join cliente on cliente.id=favorito.cfCliente
+where cliente.id=1
+
+Enseñar todas las habitacion segun el piso
+select habitacion.* from habitacion 
+inner join piso on habitacion.cfPiso = piso.id
+where piso.id=1
+
+Enseñar todas las habitacion segun el sexo del piso
+select habitacion.*  from habitacion 
+inner join piso on habitacion.cfPiso = piso.id
+where piso.sexo = "M"

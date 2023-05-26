@@ -42,6 +42,22 @@ module.exports = class ServicioContratado {
         (servicioContratado.id, servicioContratado.tiempoInicio, servicioContratado.tiempoFinal, servicioContratado.cfCliente,servicioContratado.cfServicio,servicioContratado.precioTotal,servicioContratado.estado)
     }
 
+    static async getByIdCliente(idCliente) {
+        // Consultar a la base de datos para obtener la habitación con el ID especificado
+        const query = 'SELECT * FROM servicioscontratados WHERE cfCliente = ?';
+        const resultados = await pool.query(query, [idCliente]);
+    
+        // Si no se encuentra ninguna habitación con ese ID, devolver null
+        if (resultados.length === 0) {
+            return "Error";
+        }
+
+        const servicioContratado = resultados[0];
+        // Crear un objeto Habitacion a partir de los resultados y devolverlo
+        return new ServicioContratado
+        (servicioContratado.id, servicioContratado.tiempoInicio, servicioContratado.tiempoFinal, servicioContratado.cfCliente,servicioContratado.cfServicio,servicioContratado.precioTotal,servicioContratado.estado)
+    }
+
     static async create(nuevoServicioContratado) {
         // Insertar una nueva habitación en la base de datos
 

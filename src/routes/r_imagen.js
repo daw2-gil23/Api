@@ -1,8 +1,10 @@
 const express = require('express')
 const Imagen = require('../controladores/c_imagen')
-const multer = require('multer');
-const sharp = require('sharp');
-const Habitacion = require('../controladores/c_habitacion');
+const multer = require('multer')
+const sharp = require('sharp')
+const Habitacion = require('../controladores/c_habitacion')
+const auth = require('../middleware/auth')
+const rol = require('../middleware/rol')
 
 
 const r_imagen = express.Router()
@@ -23,7 +25,7 @@ r_imagen.get('/:id', async (req, res) => {
 })
 
 // definir una ruta para subir la imagen
-r_imagen.post('/:id', upload.single('imagen'), async(req, res) => {
+r_imagen.post('/:id', auth, rol(['admin']),upload.single('imagen'), async(req, res) => {
     try {
         // leer los datos de la imagen
         const imagen = req.file.buffer
@@ -72,7 +74,7 @@ r_imagen.post('/:id', upload.single('imagen'), async(req, res) => {
     }
 })
 
-r_imagen.put('/:id',upload.single('imagen'), async(req, res) => {
+r_imagen.put('/:id',auth, rol(['admin']),upload.single('imagen'), async(req, res) => {
     try {
         const id = req.params.id
         const imagen = await Imagen.getById(id);
@@ -103,7 +105,7 @@ r_imagen.put('/:id',upload.single('imagen'), async(req, res) => {
     }
 });
 
-r_imagen.delete('/:id',async (req, res)=>{
+r_imagen.delete('/:id',auth, rol(['admin']),async (req, res)=>{
     try {
         const id = req.params.id
         const respuesta = await Imagen.delete(id);

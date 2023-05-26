@@ -34,8 +34,6 @@ module.exports = class Administrador{
                     { expiresIn: 60 * 60 } //1 hora antes de caducar
                 )
 
-                console.log("gola")
-
                 return { success: true, admin: admin , token:token};
             }
 

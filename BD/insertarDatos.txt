@@ -1,0 +1,53 @@
+INSERT INTO `bdpensiontejada`.`cliente` 
+(`id`,
+`nombre`,
+`primerApellido`,
+`segundoApellido`,
+`email`,
+`contraseña`,
+`telefono`)
+VALUES (1, "Maria", "Gil","Alvarez", "gilalvarezmaria@fpllefia.com","1234","264534785");
+
+
+INSERT INTO `bdpensiontejada`.`administrador`
+(
+`nombre`,
+`primerApellido`,
+`segundoApellido`,
+`email`,
+`contraseña`)
+VALUES ("Zeus", "Sorroche","Perez", "sorrocheperezzeus@fpllefia.com","4235");
+
+En mysql no existe el boleano pero esta el tinyinit donde 0 = false y 1 = true
+
+INSERT INTO `bdpensiontejada`.`piso`
+(
+`cocina`,
+`salon`,
+`terraza`,
+`wifi`,
+`aseos`)
+VALUES (1,1,1,1,2);
+
+INSERT INTO `bdpensiontejada`.`habitacion`
+(
+`cama`,
+`escritorio`,
+`armario`,
+`precio`,
+`cfPiso`)
+VALUES (1,1,1,300,1);
+
+INSERT INTO `bdpensiontejada`.`reserva`
+(
+`fecha_entrada`,
+`fecha_salida`,
+`cfCliente`,
+`cfHabitacion`)
+VALUES ('2023-02-27', '2024-01-25',1,1);
+
+INSERT INTO `bdpensiontejada`.`favorito`
+(
+`cfCliente`,
+`cfHabitacion`)
+VALUES (1,2);

@@ -1,6 +1,8 @@
 const express = require('express');
 const Piso = require('../controladores/c_piso');
 const r_piso = express.Router()
+const auth = require('../middleware/auth');
+const rol = require('../middleware/rol')
 //base de datos pero el le llama pool
 
 
@@ -29,7 +31,7 @@ r_piso.get('/:id',async (req, res) => {
     }
 });
 
-r_piso.post('/',async (req, res) => {
+r_piso.post('/',auth, rol(['admin']),async (req, res) => {
     try {
         const {cocina, salon, terraza, wifi, aseos,sexo } = req.body
 
@@ -58,7 +60,7 @@ r_piso.post('/',async (req, res) => {
     }
 });
 
-r_piso.put('/:id',async (req, res) => {
+r_piso.put('/:id',auth, rol(['admin']),async (req, res) => {
     try {
         const id = req.params.id
         const piso = await Piso.getById(id);
@@ -95,7 +97,7 @@ r_piso.put('/:id',async (req, res) => {
     }
 });
 
-r_piso.delete('/:id',async (req, res)=>{
+r_piso.delete('/:id',auth, rol(['admin']),async (req, res)=>{
     try {
         const id = req.params.id
         const respuesta = await Piso.delete(id);

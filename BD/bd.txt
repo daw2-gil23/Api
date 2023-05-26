@@ -1,0 +1,104 @@
+create database bdPensionTejada
+
+use bdpensiontejada;
+
+CREATE TABLE administrador(
+    id int not null primary key auto_increment,
+    nombre varchar(20) not null,
+    primerApellido varchar(20) not null,
+    segundoApellido varchar(20) not null,
+    email varchar(50) not null,
+    contraseña varchar(20) not null
+);
+
+CREATE TABLE cliente(
+    id int not null primary key auto_increment,
+    nombre varchar(20) not null,
+    primerApellido varchar(20) not null,
+    segundoApellido varchar(20) not null,
+    email varchar(50) not null,
+    contraseña varchar(20) not null,
+    telefono int(20) not null
+);
+
+CREATE TABLE habitacion(
+    id int not null primary key auto_increment,
+    cama boolean not null,
+    escritorio boolean not null,
+    armario boolean not null,
+    precio decimal not null,
+    cfPiso int not null,
+    foreign key (cfPiso) references piso(id) on delete cascade on update cascade 
+);
+
+CREATE TABLE reserva(
+    id int not null primary key auto_increment,
+    fecha_entrada date not null,
+    fecha_salida date not null,
+    cfCliente int not null,
+    cfHabitacion int not null,
+    foreign key (cfCliente) references cliente(id) on delete cascade on update cascade, 
+    foreign key (cfHabitacion) references habitacion(id) on delete cascade on update cascade 
+);
+
+CREATE TABLE piso(
+    id int not null primary key auto_increment,
+    cocina boolean not null,
+    salon boolean not null,
+    terraza boolean not null,
+    wifi boolean not null,
+    aseos int not null
+);
+
+Alter table piso add sexo varchar(2) not null 
+H = hombre
+F = mujer
+M = mixto
+
+CREATE TABLE servicioPredifinido(
+    id int unsigned not null primary key auto_increment,
+    nombre varchar(20) not null,
+    precio decimal not null,
+    cfHabitacion int not null,
+    foreign key (cfHabitacion) references habitacion(id) on delete cascade on update cascade 
+);
+
+CREATE TABLE favorito(
+    id int unsigned not null primary key auto_increment,
+    cfCliente int not null,
+    cfHabitacion int not null,
+    foreign key (cfCliente) references cliente(id) on delete cascade on update cascade, 
+    foreign key (cfHabitacion) references habitacion(id) on delete cascade on update cascade 
+);
+
+DELIMITER //
+CREATE TRIGGER actualizar_precio BEFORE INSERT ON servicioscontratados FOR EACH ROW
+BEGIN
+  DECLARE total decimal(10, 2);
+  SET total = NEW.preciototal;
+
+  SELECT SUM(preciototal) INTO total FROM servicioscontratados WHERE cfCliente = NEW.cfCliente;
+
+  SET NEW.preciototal = total;
+END //
+DELIMITER ;
+
+Dudas
+
+CREATE TABLE tiempoReservaServicio(
+    id int unsigned not null primary key auto_increment,
+    tiempoDeInicio date not null,
+    tiempoFinal decimal not null,
+    cf_servicio int not null,
+    cf_reserva int not null,   
+);
+
+CREATE TABLE servicio(
+    id int unsigned not null primary key auto_increment,
+    nombre varchar(20) not null,
+    precio decimal not null
+);
+
+alter table bdpensiontejada.servicioscontratados add (
+	precioTotal decimal,
+	estado varchar(20) default 'pendiente');

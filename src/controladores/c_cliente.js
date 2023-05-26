@@ -97,11 +97,23 @@ module.exports = class Cliente {
             if(resultados.length === 0){
                 return { success: false, message: "El email es incorrecto"};
             }else{
+
+                const token = await jwt.sign(
+                    {
+                        data: {
+                            userID: admin.id,
+                            rol: 'user'
+                        } //datos que queremos encriptar
+                    }, 
+                    process.env.secret, //palabra secreta para hacer la encriptación
+                    { expiresIn: 60 * 60 } //1 hora antes de caducar
+                )
+
                 // Si hay resultados, comprobar si la contraseña es correcta
                 const storedPassword = cliente.contrasenya;
                 const passwordsMatch = bcrypt.compareSync(contrasenya, storedPassword);
                 if (passwordsMatch) {
-                    return { success: true, cliente: cliente };
+                    return { success: true, cliente: cliente , token:token};
                 } else {
                     console.log('La contraseña es incorrecta');
                     return { success: false, message: "La contrasenya es incorrecta"};

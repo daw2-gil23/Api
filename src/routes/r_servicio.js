@@ -1,6 +1,7 @@
 const express = require('express');
 const Servicio = require('../controladores/c_servicio');
-
+const auth = require('../middleware/auth');
+const rol = require('../middleware/rol')
 
 const r_servicio = express.Router()
 //base de datos pero el le llama pool
@@ -30,7 +31,7 @@ r_servicio.get('/:id',async (req, res) => {
     }
 });
 
-r_servicio.post('/',async (req, res) => {
+r_servicio.post('/',auth, rol(['admin']), async (req, res) => {
     try {
         const {nombre, precio, description} = req.body
 
@@ -56,7 +57,7 @@ r_servicio.post('/',async (req, res) => {
     }
 });
 
-r_servicio.put('/:id',async (req, res) => {
+r_servicio.put('/:id',auth, rol(['admin']),async (req, res) => {
     try {
         const id = req.params.id
         const servicio = await Servicio.getById(id);
@@ -89,7 +90,7 @@ r_servicio.put('/:id',async (req, res) => {
     }
 });
 
-r_servicio.delete('/:id',async (req, res)=>{
+r_servicio.delete('/:id',auth, rol(['admin']),async (req, res)=>{
     try {
         const id = req.params.id
         const respuesta = await Servicio.delete(id);
