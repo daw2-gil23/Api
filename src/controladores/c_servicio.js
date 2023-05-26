@@ -84,7 +84,7 @@ module.exports = class Servicio {
 
     static async validar(nombre, description, precio) {
         var errores = []
-        var regex = /^[a-zA-Z0-9 ]+$/;
+        var regex = /^[a-zA-Z]+$/;
 
         if (!nombre || nombre.length < 2 || nombre.length > 20 || !(regex.test(nombre))) {
             errores.push("El nombre es inválido")
@@ -94,7 +94,9 @@ module.exports = class Servicio {
             errores.push("La descripcion es inválida")
         }
 
-        if (Number.isInteger(precio)) {
+        var regex = /^[0-9]+$/;
+
+        if (regex.test(precio)) {
             if (precio > 1000 || precio < 0) {
               errores.push("El precio es incorrecto");
             }

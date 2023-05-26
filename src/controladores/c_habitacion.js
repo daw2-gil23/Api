@@ -85,20 +85,20 @@ module.exports = class Habitacion {
     }        
 
     static async validar(cama, escritorio, armario, precio, cfPiso) {
-        var regex = /^[a-zA-Z0-9]+$/;
+        var regex = /^[0-9]+$/;
 
         var errores = []
 
-        if(cama!==0 && cama!==1 ){
+        if(cama!==0 && cama!==1 && !regex.test(cama)){
             errores.push("La cama solo puede ser o true o false")
         }
-        if(escritorio!==0 && escritorio!==1){
+        if(escritorio!==0 && escritorio!==1 && !regex.test(escritorio)){
             errores.push("El escritorio solo puede ser o true o false")
         }
-        if(armario!==0 && armario!==1){
+        if(armario!==0 && armario!==1 && !regex.test(armario)){
             errores.push("El armario solo puede ser o true o false")
         }
-        if (Number.isInteger(precio)) {
+        if (regex.test(precio)) {
             if (precio > 1000 || precio < 0) {
               errores.push("El precio es incorrecto");
             }

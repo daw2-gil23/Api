@@ -85,20 +85,21 @@ module.exports = class Piso {
     
     static async validar(cocina, salon, terraza, wifi, aseos,sexo) {
         var errores = []
+        var regex = /^[0-9]+$/;
         
-        if(cocina!==0 && cocina!==1){
+        if(cocina!==0 && cocina!==1 && !regex.test(cocina)){
             errores.push("La cocina solo puede ser o true o false")
         }
 
-        if(salon!==0 && salon!==1){
+        if(salon!==0 && salon!==1 && !regex.test(cocina)){
             errores.push("El salon solo puede ser o true o false")
         }
 
-        if(terraza!==0 && terraza!==1){
+        if(terraza!==0 && terraza!==1 && !regex.test(cocina)){
             errores.push("La terraza solo puede ser o true o false")
         }
         
-        if(wifi!==0 && wifi!==1){
+        if(wifi!==0 && wifi!==1 && !regex.test(cocina)){
             errores.push("El wifi solo puede ser o true o false")
         }
 
