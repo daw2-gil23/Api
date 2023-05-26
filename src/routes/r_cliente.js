@@ -131,13 +131,10 @@ r_cliente.put('/:id',auth,async (req, res) => {
     }
 });
 
-r_cliente.delete('/:id',async (req, res)=>{
+r_cliente.delete('/:id',auth, rol(['admin']),async (req, res)=>{
     try {
-        console.log("hola??")
         const id = req.params.id
         const respuesta = await Cliente.delete(id);
-        console.log("cliente")
-        console.log(respuesta)
 
         if(respuesta=="Error"){
             res.status(404).send("No se ha encontrado el usuario con la id " + id);
