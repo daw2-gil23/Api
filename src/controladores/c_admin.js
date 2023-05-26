@@ -27,7 +27,7 @@ module.exports = class Administrador{
                     {
                         data: {
                             userID: admin.id,
-                            rol: 'admin'
+                            roles: 'admin'
                         } //datos que queremos encriptar
                     }, 
                     process.env.secret, //palabra secreta para hacer la encriptación
