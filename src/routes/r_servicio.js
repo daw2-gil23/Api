@@ -35,7 +35,7 @@ r_servicio.post('/',auth, rol(['admin']), async (req, res) => {
     try {
         const {nombre, precio, description} = req.body
 
-        const errores = await Servicio.validar(nombre, precio, description)
+        const errores = await Servicio.validar(nombre, description, precio)
 
         if (errores.length > 0) {
             // Si hay errores, devolverlos como un array
