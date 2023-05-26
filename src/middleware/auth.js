@@ -5,6 +5,7 @@ const auth = async (req, res, next)=>{
     //capturamos el token que envian en la cabecera
     if(req.headers.authorization){
         const token = req.headers.authorization.split(' ')[1]
+        console.log(token)
         //desencriptamos el token
         try {
             const tokenVerificado = jwt.verify(token, process.env.secret)
