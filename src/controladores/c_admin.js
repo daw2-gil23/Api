@@ -26,7 +26,8 @@ module.exports = class Administrador{
                 const token = await jwt.sign(
                     {
                         data: {
-                            userID: admin.id
+                            userID: admin.id,
+                            rol: 'admin'
                         } //datos que queremos encriptar
                     }, 
                     process.env.secret, //palabra secreta para hacer la encriptación

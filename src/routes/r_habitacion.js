@@ -1,12 +1,13 @@
 const express = require('express')
 const Habitacion = require('../controladores/c_habitacion');
 const Piso = require('../controladores/c_piso');
+const auth = require('../middleware/auth');
 
 const r_habitacion = express.Router()
 //base de datos pero el le llama pool
 
 
-r_habitacion.get('/',async (req, res) => {
+r_habitacion.get('/',auth ,async (req, res) => {
     try {
         const habitaciones = await Habitacion.getAll();
         res.send(habitaciones);
