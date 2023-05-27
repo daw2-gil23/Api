@@ -1,6 +1,7 @@
 const pool = require('../database')
 const moment = require('moment')
 const Cliente = require('./c_cliente')
+const Habitacion = require('./c_habitacion')
 
 module.exports = class Reserva {
     // Mapping de propiedades de la tabla piso
@@ -106,7 +107,7 @@ module.exports = class Reserva {
         }
 
         try {
-            const habitacion = await Cliente.getById(cfHabitacion)
+            const habitacion = await Habitacion.getById(cfHabitacion)
             if(habitacion=="Error"){
                 errores.push("No existe la habitacion")
             }
