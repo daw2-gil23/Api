@@ -64,7 +64,7 @@ module.exports = class Reserva {
     
     static async delete(idCliente) {
         try {
-            
+
             const query = 'DELETE FROM reserva WHERE cfCliente = ?';
             const result = await pool.query(query, [idCliente]);
             
@@ -111,6 +111,9 @@ module.exports = class Reserva {
             const reserva = await this.getByIdCliente(cfCliente)
             console.log(reserva)
             if(reserva){
+                errores.push("No puedes reservar mas de una habitacion")
+            }
+            if(reserva.length > 0){
                 errores.push("No puedes reservar mas de una habitacion")
             }
         } catch (error) {
