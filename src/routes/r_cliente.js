@@ -37,7 +37,7 @@ r_cliente.post('/login/',async (req, res) => {
 
         const cliente = await Cliente.login(email,contrasenya);
 
-        res.send(cliente);
+        res.json(cliente);
 
 
     } catch (error) {
