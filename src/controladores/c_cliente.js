@@ -87,11 +87,11 @@ module.exports = class Cliente {
     
     static async login(email,contrasenya) {
         try {
-        
             const query = 'SELECT * FROM cliente WHERE email = ?';
             const resultados = await pool.query(query, [email]);
 
             const cliente = resultados[0];
+
 
             if(resultados.length === 0){
                 return { success: false, message: "El email es incorrecto"};
@@ -100,14 +100,13 @@ module.exports = class Cliente {
                 const token = await jwt.sign(
                     {
                         data: {
-                            userID: admin.id,
+                            userID: cliente.id,
                             roles: 'user'
                         } //datos que queremos encriptar
                     }, 
                     process.env.secret, //palabra secreta para hacer la encriptación
                     { expiresIn: 60 * 60 } //1 hora antes de caducar
-                )
-
+                ) 
                 // Si hay resultados, comprobar si la contraseña es correcta
                 const storedPassword = cliente.contrasenya;
                 const passwordsMatch = bcrypt.compareSync(contrasenya, storedPassword);
@@ -123,7 +122,7 @@ module.exports = class Cliente {
 
 
           } catch (error) {
-
+            console.log(error)
             return { success: false, message: 'Error logearse', status: 500 };
 
           }

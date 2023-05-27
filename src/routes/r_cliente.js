@@ -33,9 +33,9 @@ r_cliente.get('/:id',async (req, res) => {
 
 r_cliente.post('/login/',async (req, res) => {
     try {
-        
+    
         const {email, contrasenya } = req.body
-        
+
         const cliente = await Cliente.login(email,contrasenya);
 
         res.json(cliente);
