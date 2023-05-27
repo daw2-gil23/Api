@@ -113,8 +113,8 @@ module.exports = class Reserva {
             if(reserva){
                 errores.push("No puedes reservar mas de una habitacion")
             }
-            if(reserva.length > 0){
-                errores.push("No puedes reservar mas de una habitacion")
+            if (Array.isArray(reserva) && reserva.length === 0) {
+                errores.push("No puedes reservar más de una habitación");
             }
         } catch (error) {
             errores.push("Error en buscar la reserva")
