@@ -1,5 +1,6 @@
 const pool = require('../database')
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken')
 
 module.exports = class Cliente {
     // Mapping de propiedades de la tabla piso
