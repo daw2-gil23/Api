@@ -92,8 +92,6 @@ module.exports = class Cliente {
 
             const cliente = resultados[0];
 
-            console.log(cliente)
-
             if(resultados.length === 0){
                 return { success: false, message: "El email es incorrecto"};
             }else{
@@ -113,6 +111,7 @@ module.exports = class Cliente {
                 const storedPassword = cliente.contrasenya;
                 const passwordsMatch = bcrypt.compareSync(contrasenya, storedPassword);
                 if (passwordsMatch) {
+                    console.log("Logeado con exito")
                     return { success: true, cliente: cliente , token:token};
                 } else {
                     console.log('La contraseña es incorrecta');

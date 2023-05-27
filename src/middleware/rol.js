@@ -1,5 +1,4 @@
 const rol = (arrayRoles)=>{
-    console.log('arrayroles: ',arrayRoles);
     return (
         (req,res,next)=>{
             console.log('roles de req.query.roles: ', req.query.roles)
