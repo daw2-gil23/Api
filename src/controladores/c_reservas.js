@@ -110,10 +110,7 @@ module.exports = class Reserva {
         try {
             const reserva = await this.getByIdCliente(cfCliente)
             console.log(reserva)
-            if(reserva){
-                errores.push("No puedes reservar mas de una habitacion")
-            }
-            if (Array.isArray(reserva) && reserva.length === 0) {
+            if (Array.isArray(reserva) && reserva.length !== 0) {
                 errores.push("No puedes reservar más de una habitación");
             }
         } catch (error) {
