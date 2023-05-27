@@ -71,10 +71,12 @@ r_reserva.post('/',auth, async (req, res) => {
     }
 });
 
-r_reserva.delete('/:idCliente',auth, async (req, res) => {
+r_reserva.delete('/:idCliente', async (req, res) => {
     try {
         const idCliente = req.params.idCliente
+        
         const respuesta = await Reserva.delete(idCliente);
+        
 
         if(respuesta=="Error"){
             res.status(404).send("No se ha encontrado el usuario con la id " + id);

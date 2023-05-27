@@ -64,9 +64,10 @@ module.exports = class Reserva {
     
     static async delete(idCliente) {
         try {
-
+            
             const query = 'DELETE FROM reserva WHERE cfCliente = ?';
             const result = await pool.query(query, [idCliente]);
+            
 
             if (result.affectedRows === 0) {
                 return "Error";
@@ -76,7 +77,7 @@ module.exports = class Reserva {
 
           } catch (error) {
             console.error(error);
-            throw new Error('Error a eliminar de favoritos');
+            throw new Error('Error a eliminar de reserva');
           }
     }        
 
