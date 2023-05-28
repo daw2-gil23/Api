@@ -90,13 +90,13 @@ module.exports = class Servicio {
             errores.push("El nombre es inválido")
         }
 
-        var regex = /^[a-zA-Z ]+$/;
+        regex = /^[a-zA-Z ]+$/;
 
         if (!description || !(regex.test(description))) {
             errores.push("La descripcion es inválida")
         }
 
-        var regex = /^[0-9]+$/;
+        regex = /^[0-9]+$/;
 
         if (regex.test(precio)) {
             if (precio > 1000 || precio < 0) {

@@ -187,7 +187,7 @@ module.exports = class Cliente {
         regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{5,}$/;
 
         if (!password || password > 200 ||  !(regex.test(password))) {
-            errores.push("La contraseña es inválida")
+            errores.push("La contraseña debe tener como minimo una mayuscula, una minuscula, un numero y un caracter especial")
         }
 
         return errores
