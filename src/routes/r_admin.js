@@ -8,15 +8,9 @@ r_admin.post('/login',async (req, res) => {
     try {
         const {email, contrasenya } = req.body
 
-        const cliente = await Administrador.login(email,contrasenya);
+        const admin = await Administrador.login(email,contrasenya);
 
-        if(cliente.success==true){
-            res.json({
-                admin: cliente.admin , token:cliente.token
-            });
-        }else{
-            res.json(cliente.message);
-        }
+        res.json(admin);
 
 
     } catch (error) {
