@@ -13,7 +13,7 @@ r_cliente.get('/',auth, rol(['admin']),async (req, res) => {
         
         res.json(clientes);
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json(error.message);
     }
 });
 
@@ -23,12 +23,12 @@ r_cliente.get('/:id',async (req, res) => {
         const clienteId = await Cliente.getById(id);
             
         if(clienteId=="Error"){
-            res.status(404).send("No se ha encontrado el cliente con la id " + id);
+            res.status(404).json("No se ha encontrado el cliente con la id " + id);
         }else{
-            res.send(clienteId);
+            res.json(clienteId);
         }
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json(error.message);
     }
 });
 
@@ -43,7 +43,7 @@ r_cliente.post('/login/',async (req, res) => {
 
 
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json(error.message);
     }
 });
 
@@ -82,7 +82,7 @@ r_cliente.post('/',async (req, res) => {
         
 
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json(error.message);
     }
 });
 
@@ -92,7 +92,7 @@ r_cliente.put('/:id',auth,async (req, res) => {
         const cliente = await Cliente.getById(id);
 
         if(cliente=="Error"){
-            res.status(404).send("No se ha encontrado el cliente con la id " + id);
+            res.status(404).json("No se ha encontrado el cliente con la id " + id);
         }else{
             const {nombre, primerApellido, segundoApellido, email, password,telefono,avatar } = req.body
 
@@ -128,7 +128,7 @@ r_cliente.put('/:id',auth,async (req, res) => {
         }
 
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json(error.message);
     }
 });
 
@@ -138,14 +138,14 @@ r_cliente.delete('/:id',auth, rol(['admin']),async (req, res)=>{
         const respuesta = await Cliente.delete(id);
 
         if(respuesta=="Error"){
-            res.status(404).send("No se ha encontrado el usuario con la id " + id);
+            res.status(404).json("No se ha encontrado el usuario con la id " + id);
         }else{
             res.json(respuesta)
         }
 
         
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json(error.message);
     }
 })
 

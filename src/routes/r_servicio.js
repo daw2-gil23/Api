@@ -10,9 +10,9 @@ const r_servicio = express.Router()
 r_servicio.get('/',async (req, res) => {
     try {
         const servicios = await Servicio.getAll();
-        res.send(servicios);
+        res.json(servicios);
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json(error.message);
     }
 });
 
@@ -22,12 +22,12 @@ r_servicio.get('/:id',async (req, res) => {
         const servicioId = await Servicio.getById(id);
 
         if(servicioId=="Error"){
-            res.status(404).send("No se ha encontrado el servicio con la id " + id);
+            res.status(404).json("No se ha encontrado el servicio con la id " + id);
         }else{
-            res.send(servicioId);
+            res.json(servicioId);
         }
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json(error.message);
     }
 });
 
@@ -53,7 +53,7 @@ r_servicio.post('/',auth, rol(['admin']), async (req, res) => {
         }
 
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json(error.message);
     }
 });
 
@@ -97,7 +97,7 @@ r_servicio.delete('/:id',auth, rol(['admin']),async (req, res)=>{
 
         res.json(respuesta);
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json(error.message);
     }
 })
 

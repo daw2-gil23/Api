@@ -11,9 +11,9 @@ const r_habitacion = express.Router()
 r_habitacion.get('/' ,async (req, res) => {
     try {
         const habitaciones = await Habitacion.getAll();
-        res.send(habitaciones);
+        res.json(habitaciones);
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json(error.message);
     }
 });
 
@@ -23,12 +23,12 @@ r_habitacion.get('/:id',async (req, res) => {
         const habitacionId = await Habitacion.getById(id);
 
         if(habitacionId=="Error"){
-            res.status(404).send("No se ha encontrado la habitacion con la id " + id);
+            res.status(404).json("No se ha encontrado la habitacion con la id " + id);
         }else{
-            res.send(habitacionId);
+            res.json(habitacionId);
         }
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json(error.message);
     }
 });
 
@@ -55,7 +55,7 @@ r_habitacion.post('/', auth, rol(['admin']),async (req, res) => {
         }
 
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json(error.message);
     }
 });
 
@@ -99,7 +99,7 @@ r_habitacion.delete('/:id',auth, rol(['admin']), async (req, res)=>{
 
         res.json(respuesta);
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json(error.message);
     }
 })
 

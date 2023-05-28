@@ -61,7 +61,7 @@ r_imagen.post('/:id', auth, rol(['admin']),upload.single('imagen'), async(req, r
             const respuesta = await Imagen.create(imagenRedimensionada,nombre,IdHabitacion)
 
             if(respuesta.success == false){
-                res.status(500).send(respuesta.message);
+                res.status(500).json(respuesta.message);
             }
 
             // enviar una respuesta HTTP con un mensaje de éxito
@@ -70,7 +70,7 @@ r_imagen.post('/:id', auth, rol(['admin']),upload.single('imagen'), async(req, r
         }
 
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json(error.message);
     }
 })
 
@@ -80,7 +80,7 @@ r_imagen.put('/:id',auth, rol(['admin']),upload.single('imagen'), async(req, res
         const imagen = await Imagen.getById(id);
 
         if(imagen=="Error"){
-            res.status(404).send("No se ha encontrado la imagen con la id " + id);
+            res.status(404).json("No se ha encontrado la imagen con la id " + id);
         }else{
             imagen.nombre = req.file.originalname
 
@@ -101,7 +101,7 @@ r_imagen.put('/:id',auth, rol(['admin']),upload.single('imagen'), async(req, res
         }
 
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json(error.message);
     }
 });
 
@@ -111,14 +111,14 @@ r_imagen.delete('/:id',auth, rol(['admin']),async (req, res)=>{
         const respuesta = await Imagen.delete(id);
 
         if(respuesta=="Error"){
-            res.status(404).send("No se ha encontrado la imagen con la id " + id);
+            res.status(404).json("No se ha encontrado la imagen con la id " + id);
         }else{
             res.json(respuesta);;
         }
 
         
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json(error.message);
     }
 })
 
