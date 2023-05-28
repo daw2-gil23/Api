@@ -76,7 +76,7 @@ r_reserva.delete('/:idCliente',auth, async (req, res) => {
         const idCliente = req.params.idCliente
         
         const respuesta = await Reserva.delete(idCliente);
-        
+        console.log(respuesta)
 
         if(respuesta=="Error"){
             res.status(404).send("No se ha encontrado el usuario con la id " + id);
