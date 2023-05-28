@@ -39,7 +39,7 @@ module.exports = class Cliente {
         const cliente = resultados[0];
         // Crear un objeto Habitacion a partir de los resultados y devolverlo
         return new Cliente
-        (cliente.id, cliente.nombre, cliente.primerApellido, cliente.segundoApellido,cliente.contrasenya, cliente.email, cliente.telefono,cliente.avatar)
+        (cliente.id, cliente.nombre, cliente.primerApellido, cliente.segundoApellido,cliente.email, cliente.contrasenya, cliente.telefono,cliente.avatar)
     }
 
     static async create(nuevoCliente) {
