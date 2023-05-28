@@ -20,7 +20,7 @@ module.exports = class Cliente {
         const clientes = await pool.query('Select * from cliente')
 
         const clientesMap = clientes.map(({ id, nombre, primerApellido,segundoApellido,email,contrasenya,telefono,avatar }) => {
-            return new Cliente(id, nombre, primerApellido,segundoApellido,email, ,telefono,avatar );
+            return new Cliente(id, nombre, primerApellido,segundoApellido,email, contrasenya,telefono,avatar );
         });      
 
         return clientesMap
