@@ -86,11 +86,11 @@ module.exports = class Servicio {
         var errores = []
         var regex = /^[a-zA-Z]+$/;
 
-        console.log(nombre, description,precio)
-
         if (!nombre || nombre.length < 2 || nombre.length > 20 || !(regex.test(nombre))) {
             errores.push("El nombre es inválido")
         }
+
+        var regex = /^[a-zA-Z ]+$/;
 
         if (!description || !(regex.test(description))) {
             errores.push("La descripcion es inválida")
