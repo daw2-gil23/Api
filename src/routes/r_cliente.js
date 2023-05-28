@@ -10,7 +10,8 @@ const rol = require('../middleware/rol')
 r_cliente.get('/',auth, rol(['admin']),async (req, res) => {
     try {
         const clientes = await Cliente.getAll();
-        res.send(clientes);
+        
+        res.json(clientes);
     } catch (error) {
         res.status(500).send(error.message);
     }
