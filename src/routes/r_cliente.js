@@ -57,7 +57,6 @@ r_cliente.post('/',async (req, res) => {
             // Si hay errores, devolverlos como un array
             res.json(errores)
         } else {
-
             // Generar un salt (un valor aleatorio que se utiliza en la función hash)
             const saltRounds = 10;
             const salt = bcrypt.genSaltSync(saltRounds);

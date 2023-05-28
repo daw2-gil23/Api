@@ -109,7 +109,6 @@ module.exports = class Reserva {
 
         try {
             const reserva = await this.getByIdCliente(cfCliente)
-            console.log(reserva)
             if (reserva.length !== 0) {
                 errores.push("No puedes reservar más de una habitación");
             }
@@ -121,6 +120,10 @@ module.exports = class Reserva {
             const habitacion = await Habitacion.getById(cfHabitacion)
             if(habitacion=="Error"){
                 errores.push("No existe la habitacion")
+            }
+            const reserva = await this.getByIdHabitacion(cfHabitacion)
+            if (reserva.length !== 0) {
+                errores.push("No puedes reservar esta habitacion por que ya esta reservada");
             }
         } catch (error) {
             errores.push("Error en buscar la habitacion")

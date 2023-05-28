@@ -190,14 +190,6 @@ module.exports = class Cliente {
             errores.push("La contraseña es inválida")
         }
 
-        if (Number.isInteger(precio)) {
-            if (precio > 1000 || precio < 0) {
-              errores.push("El precio es incorrecto");
-            }
-          } else {
-            errores.push("El precio no es un número entero");
-        }
-
         return errores
 
     }   
